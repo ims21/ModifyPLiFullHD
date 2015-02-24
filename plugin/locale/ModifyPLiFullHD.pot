@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-24 16:03+0100\n"
+"POT-Creation-Date: 2015-02-24 17:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,9 @@ msgstr ""
 msgid "Recreate"
 msgstr ""
 
+msgid "For new version must be used \"recreate\" at first"
+msgstr ""
+
 msgid "Skin"
 msgstr ""
 
@@ -69,6 +72,15 @@ msgid "Selector color (a,r,g,b)"
 msgstr ""
 
 msgid "TransponderInfo color (a,r,g,b)"
+msgstr ""
+
+msgid "SelectedFG color (a,r,g,b)"
+msgstr ""
+
+msgid "Yellow color (a,r,g,b)"
+msgstr ""
+
+msgid "SecondFG color (a,r,g,b)"
 msgstr ""
 
 msgid ""
