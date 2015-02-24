@@ -221,7 +221,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close()
 
 	def recreate(self):
-		restartbox = self.session.openWithCallback(self.callbackRecreate, MessageBox, _("Are you sure delete and create new\n%s?") % NAME)
+		restartbox = self.session.openWithCallback(self.callbackRecreate, MessageBox, _("Are you sure delete and create new:\n%s?") % (NAME+".xml"))
 		restartbox.setTitle(_("Modify PLi-FullHD - recreate user skin file"))
 
 	def callbackRecreate(self, answer):
