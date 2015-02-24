@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Modify PLi-FullHD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-24 09:26+0100\n"
+"PO-Revision-Date: 2015-02-24 09:29+0100\n"
+"Last-Translator: ims <ims21@users.sourceforge.net>\n"
+"Language-Team: PLi\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+
+msgid "Modify PLi-FullHD"
+msgstr ""
+
+msgid "Change regular font and colors in PLi-FullHD/PLi-HD1 skin"
+msgstr ""
+
+msgid "PLi-FullHD"
+msgstr ""
+
+msgid "PLi-HD1"
+msgstr ""
+
+msgid "Nemesis Bold Regular"
+msgstr ""
+
+msgid "LiberationSans Regular"
+msgstr ""
+
+msgid "LiberationSans Italic"
+msgstr ""
+
+msgid "LiberationSans Bold"
+msgstr ""
+
+msgid "LiberationSans Bold Italic"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+#
+msgid "Cancel"
+msgstr "Zavřít"
+
+#
+#, fuzzy
+msgid "Recreate"
+msgstr "opakování"
+
+#
+msgid "Skin"
+msgstr ""
+
+msgid "Regular font"
+msgstr ""
+
+msgid "Top color (a,r,g,b)"
+msgstr ""
+
+msgid "Bottom color (a,r,g,b)"
+msgstr ""
+
+msgid "Selector color (a,r,g,b)"
+msgstr ""
+
+msgid "TransponderInfo color (a,r,g,b)"
+msgstr ""
+
+#
+#, fuzzy
+msgid ""
+"GUI needs a restart to apply a new skin\n"
+"Do you want to restart the GUI now?"
+msgstr ""
+"Pro uplatnění skinu je potřeba restartovat GUI\n"
+"Chcete nyní restartovat GUI?"
+
+msgid "Modify PLi-FullHD - setup font and colors"
+msgstr ""
+
+#
+#, fuzzy
+msgid "Really close without apply changes?"
+msgstr "Opravdu zavřít bez uloženého nastavení?"
+
+#, python-format
+msgid ""
+"Are you sure delete and create new\n"
+"%s?"
+msgstr ""
+
+msgid "Modify PLi-FullHD - recreate user skin file"
+msgstr ""
+
