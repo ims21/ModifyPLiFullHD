@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-24 17:12+0100\n"
+"POT-Creation-Date: 2015-02-24 18:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,13 @@ msgstr ""
 msgid "For new version must be used \"recreate\" at first"
 msgstr ""
 
+msgid "Modify PLi-FullHD - setup font and colors"
+msgstr ""
+
+#, python-format
+msgid " v%s"
+msgstr ""
+
 msgid "Skin"
 msgstr ""
 
@@ -86,9 +93,6 @@ msgstr ""
 msgid ""
 "GUI needs a restart to apply a new skin\n"
 "Do you want to restart the GUI now?"
-msgstr ""
-
-msgid "Modify PLi-FullHD - setup font and colors"
 msgstr ""
 
 msgid "Really close without apply changes?"

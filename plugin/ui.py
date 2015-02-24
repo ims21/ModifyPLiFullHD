@@ -34,14 +34,13 @@ NAME = "/etc/enigma2/skin_user_PLi-FullHD"
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
-	<screen name="ModifyPLiFullHD" position="center,center" size="410,198" title="Modify PLi-FullHD - setup font and colors" backgroundColor="#31000000">
-		<widget name="config" position="10,10" size="390,150" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand" />
-		<ePixmap pixmap="skin_default/div-h.png" position="5,163" zPosition="2" size="400,2" />
-		<widget name="key_red"   position="005,169" zPosition="2" size="100,28" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1" />
-		<widget name="key_green" position="105,169" zPosition="2" size="100,28" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1" />
-		<widget name="key_blue"  position="305,169" zPosition="2" size="100,28" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1" />
-		<widget name="version" position="205,172" size="35,22" font="Regular;12" valign="bottom" halign="center" transparent="1" />
-		<widget name="info" position="205,172" size="35,22" font="Regular;12" valign="bottom" halign="center" transparent="1" />
+	<screen name="ModifyPLiFullHD" position="center,center" size="610,298" title="Modify PLi-FullHD - setup font and colors" backgroundColor="#31000000">
+		<widget name="config" position="10,10" size="590,225" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,263" zPosition="2" size="600,2"/>
+		<widget name="key_red"   position="005,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		<widget name="key_green" position="155,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
+		<widget name="key_blue"  position="455,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
+		<widget name="info" position="5,237" size="600,25" font="Regular;20" halign="center" transparent="1"/>
 	</screen>"""
 
 	def __init__(self, session):
@@ -52,7 +51,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry )
 
-		self.setup_title = _("Modify PLi-FullHD")
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
 				"cancel": self.keyCancel,
@@ -66,7 +64,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self["key_red"] = Label(_("Cancel"))
 		self["key_blue"] = Label(_("Recreate"))
 		self["info"]= Label(_("For new version must be used \"recreate\" at first"))
-		self["version"] = Label("v%s" % VERSION)
+		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" v%s") % VERSION
+		self.setTitle(self.title)
 		
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
 		self.setMenu()
@@ -245,7 +244,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.setNewParameters()
 		if self.current_skin == cfg.skin.description[cfg.skin.value] and self["config"].isChanged():
 			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
-			restartbox.setTitle(_("Modify PLi-FullHD - setup font and colors"))
+			restartbox.setTitle(self.title)
 		else:
 			self.close()
 
@@ -257,7 +256,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def keyCancel(self):
 		if self["config"].isChanged():
 			restartbox = self.session.openWithCallback(self.cancelCallback, MessageBox, _("Really close without apply changes?"))
-			restartbox.setTitle(_("Modify PLi-FullHD - setup font and colors"))
+			restartbox.setTitle(self.title)
 		else:
 			self.close()
 
