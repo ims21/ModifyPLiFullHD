@@ -35,13 +35,13 @@ NAME = "/etc/enigma2/skin_user_PLi-FullHD"
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
-	<screen name="ModifyPLiFullHD" position="center,center" size="610,298" title="Modify PLi-FullHD - setup font and colors" backgroundColor="#31000000">
-		<widget name="config" position="10,10" size="590,225" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
-		<ePixmap pixmap="skin_default/div-h.png" position="5,263" zPosition="2" size="600,2"/>
-		<widget name="key_red"   position="005,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
-		<widget name="key_green" position="155,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
-		<widget name="key_blue"  position="455,269" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
-		<widget name="info" position="5,237" size="600,25" font="Regular;20" halign="center" transparent="1"/>
+	<screen name="ModifyPLiFullHD" position="center,center" size="610,323" title="Modify PLi-FullHD - setup font and colors" backgroundColor="#31000000">
+		<widget name="config" position="10,10" size="590,250" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,288" zPosition="2" size="600,2"/>
+		<widget name="key_red"   position="005,294" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		<widget name="key_green" position="155,294" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
+		<widget name="key_blue"  position="455,294" zPosition="2" size="150,28" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
+		<widget name="info" position="5,262" size="600,25" font="Regular;20" halign="center" transparent="1"/>
 	</screen>"""
 
 	def __init__(self, session):
@@ -118,7 +118,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		os.rename("%s.xml" % NAME, "%s.tmp" % NAME)
 		fi = open("%s.tmp" % NAME, "r")
 		fo = open("%s.xml" % NAME, "w")
-		top, bas, sel, tinfo, selfg, yellow, secfg = self.cfg2hexstring()
+		top, bas, sel, tinfo, selfg, yellow, red, secfg = self.cfg2hexstring()
 		for line in fi:
 			if "<font name=\"Regular\" filename=" in line:
 				line = line.replace(used_font, cfg.font.value)
