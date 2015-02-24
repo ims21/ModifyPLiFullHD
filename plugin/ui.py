@@ -26,6 +26,7 @@ config.plugins.ModifyPLiFullHD.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48
 config.plugins.ModifyPLiFullHD.transponderinfocolor = NoSave(ConfigIP(default=[0,0,144,240]))
 config.plugins.ModifyPLiFullHD.selectedfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 config.plugins.ModifyPLiFullHD.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
+config.plugins.ModifyPLiFullHD.redcolor = NoSave(ConfigIP(default=[0,255,74,60]))
 config.plugins.ModifyPLiFullHD.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 
 cfg = config.plugins.ModifyPLiFullHD
@@ -85,6 +86,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("TransponderInfo color (a,r,g,b)"), cfg.transponderinfocolor))
 		self.list.append(getConfigListEntry(_("SelectedFG color (a,r,g,b)"), cfg.selectedfgcolor))
 		self.list.append(getConfigListEntry(_("Yellow color (a,r,g,b)"), cfg.yellowcolor))
+		self.list.append(getConfigListEntry(_("Red color (a,r,g,b)"), cfg.redcolor))
 		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
 
 		self["config"].list = self.list
@@ -145,6 +147,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
 				line = line.replace("%s" %colors ,"%s" % yellow)
+			if "<color name=\"red\" value=\"#" in line:
+				pos = line.find("\"#")
+				colors = line[pos+2:pos+10]
+				line = line.replace("%s" %colors ,"%s" % red)
 			if "<color name=\"secondFG\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
@@ -176,6 +182,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ticolors = None
 		selfgcolors = None
 		yelcolors = None
+		redcolors = None
 		secfgcolors = None
 		for line in open("%s.xml" % NAME, "r"):
 			if "<color name=\"toptemplatecolor\" value=\"#" in line:
@@ -196,13 +203,16 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if "<color name=\"yellow\" value=\"#" in line:
 				pos = line.find("\"#")
 				yelcolors = line[pos+2:pos+10]
+			if "<color name=\"red\" value=\"#" in line:
+				pos = line.find("\"#")
+				redcolors = line[pos+2:pos+10]
 			if "<color name=\"secondFG\" value=\"#" in line:
 				pos = line.find("\"#")
 				secfgcolors = line[pos+2:pos+10]
-		return tcolors, bcolors, scolors, ticolors, selfgcolors, yelcolors, secfgcolors
+		return tcolors, bcolors, scolors, ticolors, selfgcolors, yelcolors, redcolors, secfgcolors
 
 	def getColors(self):
-		top, bas, selector, t_info, selfg, yellow, secfg = self.readColors()
+		top, bas, selector, t_info, selfg, yellow, red, secfg = self.readColors()
 		if top is not None:
 			cfg.toptemplatecolor.value = self.mapping(top)
 		if bas is not None:
@@ -215,6 +225,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			cfg.selectedfgcolor.value = self.mapping(selfg)
 		if yellow is not None:
 			cfg.yellowcolor.value = self.mapping(yellow)
+		if red is not None:
+			cfg.redcolor.value = self.mapping(red)
 		if secfg is not None:
 			cfg.secondfgcolor.value = self.mapping(secfg)
 
@@ -228,6 +240,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ti = ""
 		selfg = ""
 		yel = ""
+		red = ""
 		secfg = ""
 		for i in range(0,4):
 			top += "%02x" % cfg.toptemplatecolor.value[i]
@@ -236,8 +249,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			ti += "%02x" % cfg.transponderinfocolor.value[i]
 			selfg += "%02x" % cfg.selectedfgcolor.value[i]
 			yel += "%02x" % cfg.yellowcolor.value[i]
+			red += "%02x" % cfg.redcolor.value[i]
 			secfg += "%02x" % cfg.secondfgcolor.value[i]
-		return top, bas, sel, ti, selfg, yel, secfg
+		return top, bas, sel, ti, selfg, yel, red, secfg
 
 	def keySave(self):
 		self.setSkinPath()
@@ -288,6 +302,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.transponderinfoColor())
 		fi.write(self.selectedFGColor())
 		fi.write(self.yellowColor())
+		fi.write(self.redColor())
 		fi.write(self.secondFGColor())
 		fi.write(self.colorsEnd())
 		fi.write(self.windowStyleCode())
@@ -323,6 +338,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return "		<color name=\"selectedFG\" value=\"#00fcc000\"/>\n"
 	def yellowColor(self):
 		return "		<color name=\"yellow\" value=\"#00ffc000\"/>\n"
+	def redColor(self):
+		return "		<color name=\"red\" value=\"#00ff4a3c\"/>\n"
 	def secondFGColor(self):
 		return "		<color name=\"secondFG\" value=\"#00fcc000\"/>\n"
 	def windowStyleCode(self):
