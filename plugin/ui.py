@@ -26,8 +26,10 @@ config.plugins.ModifyPLiFullHD.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48
 config.plugins.ModifyPLiFullHD.transponderinfocolor = NoSave(ConfigIP(default=[0,0,144,240]))
 config.plugins.ModifyPLiFullHD.selectedfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 config.plugins.ModifyPLiFullHD.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
-config.plugins.ModifyPLiFullHD.redcolor = NoSave(ConfigIP(default=[0,255,74,60]))
+config.plugins.ModifyPLiFullHD.redcolor = NoSave(ConfigIP(default=[0,250,64,16]))
 config.plugins.ModifyPLiFullHD.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
+config.plugins.ModifyPLiFullHD.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
+config.plugins.ModifyPLiFullHD.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
 
 cfg = config.plugins.ModifyPLiFullHD
 
@@ -84,10 +86,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("Bottom color (a,r,g,b)"), cfg.basictemplatecolor))
 		self.list.append(getConfigListEntry(_("Selector color (a,r,g,b)"), cfg.selectorcolor))
 		self.list.append(getConfigListEntry(_("TransponderInfo color (a,r,g,b)"), cfg.transponderinfocolor))
+		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
 		self.list.append(getConfigListEntry(_("SelectedFG color (a,r,g,b)"), cfg.selectedfgcolor))
 		self.list.append(getConfigListEntry(_("Yellow color (a,r,g,b)"), cfg.yellowcolor))
 		self.list.append(getConfigListEntry(_("Red color (a,r,g,b)"), cfg.redcolor))
-		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
+		self.list.append(getConfigListEntry(_("Fallback color (a,r,g,b)"), cfg.fallbackcolor))
+		self.list.append(getConfigListEntry(_("Notavailable color (a,r,g,b)"), cfg.notavailablecolor))
+
 
 		self["config"].list = self.list
 
@@ -118,7 +123,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		os.rename("%s.xml" % NAME, "%s.tmp" % NAME)
 		fi = open("%s.tmp" % NAME, "r")
 		fo = open("%s.xml" % NAME, "w")
-		top, bas, sel, tinfo, selfg, yellow, red, secfg = self.cfg2hexstring()
+		top, bas, sel, tinfo, selfg, yellow, red, secfg, fallb, na = self.cfg2hexstring()
 		for line in fi:
 			if "<font name=\"Regular\" filename=" in line:
 				line = line.replace(used_font, cfg.font.value)
@@ -155,6 +160,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
 				line = line.replace("%s" %colors ,"%s" % secfg)
+			if "<color name=\"fallback\" value=\"#" in line:
+				pos = line.find("\"#")
+				colors = line[pos+2:pos+10]
+				line = line.replace("%s" %colors ,"%s" % fallb)
+			if "<color name=\"notavailable\" value=\"#" in line:
+				pos = line.find("\"#")
+				colors = line[pos+2:pos+10]
+				line = line.replace("%s" %colors ,"%s" % na)
 			fo.write(line)
 		fo.close()
 		fi.close()
@@ -184,6 +197,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		yelcolors = None
 		redcolors = None
 		secfgcolors = None
+		fallbcolors = None
+		nacolors = None
 		for line in open("%s.xml" % NAME, "r"):
 			if "<color name=\"toptemplatecolor\" value=\"#" in line:
 				pos = line.find("\"#")
@@ -209,10 +224,16 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if "<color name=\"secondFG\" value=\"#" in line:
 				pos = line.find("\"#")
 				secfgcolors = line[pos+2:pos+10]
-		return tcolors, bcolors, scolors, ticolors, selfgcolors, yelcolors, redcolors, secfgcolors
+			if "<color name=\"fallback\" value=\"#" in line:
+				pos = line.find("\"#")
+				fallbcolors = line[pos+2:pos+10]
+			if "<color name=\"notavailable\" value=\"#" in line:
+				pos = line.find("\"#")
+				nacolors = line[pos+2:pos+10]
+		return tcolors, bcolors, scolors, ticolors, selfgcolors, yelcolors, redcolors, secfgcolors, fallbcolors, nacolors
 
 	def getColors(self):
-		top, bas, selector, t_info, selfg, yellow, red, secfg = self.readColors()
+		top, bas, selector, t_info, selfg, yellow, red, secfg, fallb, na = self.readColors()
 		if top is not None:
 			cfg.toptemplatecolor.value = self.mapping(top)
 		if bas is not None:
@@ -229,6 +250,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			cfg.redcolor.value = self.mapping(red)
 		if secfg is not None:
 			cfg.secondfgcolor.value = self.mapping(secfg)
+		if fallb is not None:
+			cfg.fallbackcolor.value = self.mapping(fallb)
+		if na is not None:
+			cfg.notavailablecolor.value = self.mapping(na)
 
 	def mapping(self, colorstring):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
@@ -242,6 +267,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		yel = ""
 		red = ""
 		secfg = ""
+		fallb = ""
+		na = ""
 		for i in range(0,4):
 			top += "%02x" % cfg.toptemplatecolor.value[i]
 			bas += "%02x" % cfg.basictemplatecolor.value[i]
@@ -251,7 +278,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			yel += "%02x" % cfg.yellowcolor.value[i]
 			red += "%02x" % cfg.redcolor.value[i]
 			secfg += "%02x" % cfg.secondfgcolor.value[i]
-		return top, bas, sel, ti, selfg, yel, red, secfg
+			fallb += "%02x" % cfg.fallbackcolor.value[i]
+			na += "%02x" % cfg.notavailablecolor.value[i]
+		return top, bas, sel, ti, selfg, yel, red, secfg, fallb, na
 
 	def keySave(self):
 		self.setSkinPath()
@@ -304,6 +333,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.yellowColor())
 		fi.write(self.redColor())
 		fi.write(self.secondFGColor())
+		fi.write(self.fallbackColor())
+		fi.write(self.notavailableColor())
 		fi.write(self.colorsEnd())
 		fi.write(self.windowStyleCode())
 		fi.write(self.skinEnd())
@@ -339,9 +370,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def yellowColor(self):
 		return "		<color name=\"yellow\" value=\"#00ffc000\"/>\n"
 	def redColor(self):
-		return "		<color name=\"red\" value=\"#00ff4a3c\"/>\n"
+		return "		<color name=\"red\" value=\"#00fa4010\"/>\n"
 	def secondFGColor(self):
 		return "		<color name=\"secondFG\" value=\"#00fcc000\"/>\n"
+	def fallbackColor(self):
+		return "		<color name=\"fallback\" value=\"#00b0b0c0\"/>\n"
+	def notavailableColor(self):
+		return "		<color name=\"notavailable\" value=\"#005e5e5e\"/>\n"
 	def windowStyleCode(self):
 		return 	"	<windowstyle id=\"0\" type=\"skinned\">\n \
 		<title offset=\"20,10\" font=\"Regular;20\"/>\n \
