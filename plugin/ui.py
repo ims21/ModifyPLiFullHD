@@ -325,6 +325,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.fontName())
 		fi.write(self.fontsEnd())
 		fi.write(self.colorsBegin())
+		# --- colors begin
 		fi.write(self.toptemplateColor())
 		fi.write(self.basictemplateColor())
 		fi.write(self.selectorColor())
@@ -335,6 +336,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.secondFGColor())
 		fi.write(self.fallbackColor())
 		fi.write(self.notavailableColor())
+		# --- colors end
 		fi.write(self.colorsEnd())
 		fi.write(self.windowStyleCode())
 		fi.write(self.skinEnd())
