@@ -368,9 +368,21 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		</borderset>\n \
 	</windowstyle>\n"
 
+	def isFonts(self):
+		root = ET.parse("%s.xml" % NAME).getroot()
+		fonts = root.find('fonts')
+		if fonts:
+			return True
+		return False
+	def isColors(self):
+		root = ET.parse("%s.xml" % NAME).getroot()
+		colors = root.find('colors')
+		if colors:
+			return True
+		return False
 	def isWindowsStyle(self):
 		root = ET.parse("%s.xml" % NAME).getroot()
-		style = root.find('windowstyle')
-		if style:
+		windowstyle = root.find('windowstyle')
+		if windowstyle:
 			return True
 		return False
