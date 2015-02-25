@@ -225,7 +225,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
 
 	def cfg2hexstring(self):
-		top = bottom = selector = t_info = selectedfg = yellow = red = secondfg = fallback = notavailable = ""
 		for i in range(0,4):
 			top += "%02x" % cfg.toptemplatecolor.value[i]
 			bottom += "%02x" % cfg.basictemplatecolor.value[i]
