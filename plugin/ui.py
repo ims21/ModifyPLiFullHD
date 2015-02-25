@@ -194,59 +194,32 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					return "LiberationSans-BoldItalic"
 		return "nmsbd"
 
-	def readColors(self):
-		top = bottom = selector = t_info = selectedfg = yellow = red = secondfg = fallback = notavailable = None
-
+	def getColors(self):
 		root = ET.parse("%s.xml" % NAME).getroot()
 		colors = root.find('colors')
 		for color in colors:
 			name = color.attrib.get('name', None)
 			value = color.attrib.get('value', None)
 			if name == "toptemplatecolor":
-				top = value[1:9]
+				cfg.toptemplatecolor.value = self.mapping(value[1:9])
 			if name == "basictemplatecolor":
-				bottom = value[1:9]
+				cfg.basictemplatecolor.value = self.mapping(value[1:9])
 			if name == "selectorcolor":
-				selector = value[1:9]
+				cfg.selectorcolor.value = self.mapping(value[1:9])
 			if name == "transponderinfo":
-				t_info = value[1:9]
+				cfg.transponderinfocolor.value = self.mapping(value[1:9])
 			if name == "selectedFG":
-				selectedfg = value[1:9]
+				cfg.selectedfgcolor.value = self.mapping(value[1:9])
 			if name == "yellow":
-				yellow = value[1:9]
+				cfg.yellowcolor.value = self.mapping(value[1:9])
 			if name == "red":
-				red = value[1:9]
+				cfg.redcolor.value = self.mapping(value[1:9])
 			if name == "secondFG":
-				secondfg = value[1:9]
+				cfg.secondfgcolor.value = self.mapping(value[1:9])
 			if name == "fallback":
-				fallback = value[1:9]
+				cfg.fallbackcolor.value = self.mapping(value[1:9])
 			if name == "notavailable":
-				notavailable = value[1:9]
-
-		return top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable
-
-	def getColors(self):
-		top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable = self.readColors()
-		if top is not None:
-			cfg.toptemplatecolor.value = self.mapping(top)
-		if bottom is not None:
-			cfg.basictemplatecolor.value = self.mapping(bottom)
-		if selector is not None:
-			cfg.selectorcolor.value = self.mapping(selector)
-		if t_info is not None:
-			cfg.transponderinfocolor.value = self.mapping(t_info)
-		if selectedfg is not None:
-			cfg.selectedfgcolor.value = self.mapping(selectedfg)
-		if yellow is not None:
-			cfg.yellowcolor.value = self.mapping(yellow)
-		if red is not None:
-			cfg.redcolor.value = self.mapping(red)
-		if secondfg is not None:
-			cfg.secondfgcolor.value = self.mapping(secondfg)
-		if fallback is not None:
-			cfg.fallbackcolor.value = self.mapping(fallback)
-		if notavailable is not None:
-			cfg.notavailablecolor.value = self.mapping(notavailable)
+				cfg.notavailablecolor.value = self.mapping(value[1:9])
 
 	def mapping(self, colorstring):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
