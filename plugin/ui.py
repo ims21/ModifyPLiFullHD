@@ -11,6 +11,8 @@ from Screens.MessageBox import MessageBox
 from plugin import VERSION
 import os
 
+import xml.etree.cElementTree as ET
+
 config.plugins.ModifyPLiFullHD = ConfigSubsection()
 config.plugins.ModifyPLiFullHD.skin = NoSave(ConfigSelection(default = "fullhd", choices = [("fullhd",_("PLi-FullHD")),("hd1",_("PLi-HD1"))]))
 config.plugins.ModifyPLiFullHD.font = NoSave(ConfigSelection(default = "nmsbd", choices = [
@@ -123,7 +125,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		os.rename("%s.xml" % NAME, "%s.tmp" % NAME)
 		fi = open("%s.tmp" % NAME, "r")
 		fo = open("%s.xml" % NAME, "w")
-		top, bas, sel, tinfo, selfg, yellow, red, secfg, fallb, na = self.cfg2hexstring()
+		top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable = self.cfg2hexstring()
 		for line in fi:
 			if "<font name=\"Regular\" filename=" in line:
 				line = line.replace(used_font, cfg.font.value)
@@ -135,19 +137,19 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if "<color name=\"basictemplatecolor\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % bas)
+				line = line.replace("%s" %colors ,"%s" % bottom)
 			if "<color name=\"selectorcolor\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % sel)
+				line = line.replace("%s" %colors ,"%s" % selector)
 			if "<color name=\"transponderinfo\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % tinfo)
+				line = line.replace("%s" %colors ,"%s" % t_info)
 			if "<color name=\"selectedFG\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % selfg)
+				line = line.replace("%s" %colors ,"%s" % selectedfg)
 			if "<color name=\"yellow\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
@@ -159,128 +161,110 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if "<color name=\"secondFG\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % secfg)
+				line = line.replace("%s" %colors ,"%s" % secondfg)
 			if "<color name=\"fallback\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % fallb)
+				line = line.replace("%s" %colors ,"%s" % fallback)
 			if "<color name=\"notavailable\" value=\"#" in line:
 				pos = line.find("\"#")
 				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % na)
+				line = line.replace("%s" %colors ,"%s" % notavailable)
 			fo.write(line)
 		fo.close()
 		fi.close()
 		os.unlink("%s.tmp" % NAME)
 
 	def readFont(self):
-		for line in open("%s.xml" % NAME, "r"):
-			if "<font name=\"Regular\" filename=" in line:
-				if "nmsbd.ttf" in line:
+		root = ET.parse("%s.xml" % NAME).getroot()
+		fonts = root.find('fonts')
+		for font in fonts:
+			name = font.attrib.get('name', None)
+			value = font.attrib.get('filename', None)
+			if name == "Regular":
+				if "nmsbd.ttf" in value:
 					return "nmsbd"
-				if "LiberationSans-Regular.ttf" in line:
+				if "LiberationSans-Regular.ttf" in value:
 					return "LiberationSans-Regular"
-				if "LiberationSans-Italic.ttf" in line:
+				if "LiberationSans-Italic.ttf" in value:
 					return "LiberationSans-Italic"
-				if "LiberationSans-Bold.ttf" in line:
+				if "LiberationSans-Bold.ttf" in value:
 					return "LiberationSans-Bold"
-				if "LiberationSans-BoldItalic.ttf" in line:
+				if "LiberationSans-BoldItalic.ttf" in value:
 					return "LiberationSans-BoldItalic"
 		return "nmsbd"
 
 	def readColors(self):
-		tcolors = None
-		bcolors = None
-		scolors = None
-		ticolors = None
-		selfgcolors = None
-		yelcolors = None
-		redcolors = None
-		secfgcolors = None
-		fallbcolors = None
-		nacolors = None
-		for line in open("%s.xml" % NAME, "r"):
-			if "<color name=\"toptemplatecolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				tcolors = line[pos+2:pos+10]
-			if "<color name=\"basictemplatecolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				bcolors = line[pos+2:pos+10]
-			if "<color name=\"selectorcolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				scolors = line[pos+2:pos+10]
-			if "<color name=\"transponderinfo\" value=\"#" in line:
-				pos = line.find("\"#")
-				ticolors = line[pos+2:pos+10]
-			if "<color name=\"selectedFG\" value=\"#" in line:
-				pos = line.find("\"#")
-				selfgcolors = line[pos+2:pos+10]
-			if "<color name=\"yellow\" value=\"#" in line:
-				pos = line.find("\"#")
-				yelcolors = line[pos+2:pos+10]
-			if "<color name=\"red\" value=\"#" in line:
-				pos = line.find("\"#")
-				redcolors = line[pos+2:pos+10]
-			if "<color name=\"secondFG\" value=\"#" in line:
-				pos = line.find("\"#")
-				secfgcolors = line[pos+2:pos+10]
-			if "<color name=\"fallback\" value=\"#" in line:
-				pos = line.find("\"#")
-				fallbcolors = line[pos+2:pos+10]
-			if "<color name=\"notavailable\" value=\"#" in line:
-				pos = line.find("\"#")
-				nacolors = line[pos+2:pos+10]
-		return tcolors, bcolors, scolors, ticolors, selfgcolors, yelcolors, redcolors, secfgcolors, fallbcolors, nacolors
+		top = bottom = selector = t_info = selectedfg = yellow = red = secondfg = fallback = notavailable = None
+
+		root = ET.parse("%s.xml" % NAME).getroot()
+		colors = root.find('colors')
+		for color in colors:
+			name = color.attrib.get('name', None)
+			value = color.attrib.get('value', None)
+			if name == "toptemplatecolor":
+				top = value[1:9]
+			if name == "basictemplatecolor":
+				bottom = value[1:9]
+			if name == "selectorcolor":
+				selector = value[1:9]
+			if name == "transponderinfo":
+				t_info = value[1:9]
+			if name == "selectedFG":
+				selectedfg = value[1:9]
+			if name == "yellow":
+				yellow = value[1:9]
+			if name == "red":
+				red = value[1:9]
+			if name == "secondFG":
+				secondfg = value[1:9]
+			if name == "fallback":
+				fallback = value[1:9]
+			if name == "notavailable":
+				notavailable = value[1:9]
+
+		return top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable
 
 	def getColors(self):
-		top, bas, selector, t_info, selfg, yellow, red, secfg, fallb, na = self.readColors()
+		top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable = self.readColors()
 		if top is not None:
 			cfg.toptemplatecolor.value = self.mapping(top)
-		if bas is not None:
-			cfg.basictemplatecolor.value = self.mapping(bas)
+		if bottom is not None:
+			cfg.basictemplatecolor.value = self.mapping(bottom)
 		if selector is not None:
 			cfg.selectorcolor.value = self.mapping(selector)
 		if t_info is not None:
 			cfg.transponderinfocolor.value = self.mapping(t_info)
-		if selfg is not None:
-			cfg.selectedfgcolor.value = self.mapping(selfg)
+		if selectedfg is not None:
+			cfg.selectedfgcolor.value = self.mapping(selectedfg)
 		if yellow is not None:
 			cfg.yellowcolor.value = self.mapping(yellow)
 		if red is not None:
 			cfg.redcolor.value = self.mapping(red)
-		if secfg is not None:
-			cfg.secondfgcolor.value = self.mapping(secfg)
-		if fallb is not None:
-			cfg.fallbackcolor.value = self.mapping(fallb)
-		if na is not None:
-			cfg.notavailablecolor.value = self.mapping(na)
+		if secondfg is not None:
+			cfg.secondfgcolor.value = self.mapping(secondfg)
+		if fallback is not None:
+			cfg.fallbackcolor.value = self.mapping(fallback)
+		if notavailable is not None:
+			cfg.notavailablecolor.value = self.mapping(notavailable)
 
 	def mapping(self, colorstring):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
 
 	def cfg2hexstring(self):
-		top = ""
-		bas = ""
-		sel = ""
-		ti = ""
-		selfg = ""
-		yel = ""
-		red = ""
-		secfg = ""
-		fallb = ""
-		na = ""
+		top = bottom = selector = t_info = selectedfg = yellow = red = secondfg = fallback = notavailable = ""
 		for i in range(0,4):
 			top += "%02x" % cfg.toptemplatecolor.value[i]
-			bas += "%02x" % cfg.basictemplatecolor.value[i]
-			sel += "%02x" % cfg.selectorcolor.value[i]
-			ti += "%02x" % cfg.transponderinfocolor.value[i]
-			selfg += "%02x" % cfg.selectedfgcolor.value[i]
-			yel += "%02x" % cfg.yellowcolor.value[i]
+			bottom += "%02x" % cfg.basictemplatecolor.value[i]
+			selector += "%02x" % cfg.selectorcolor.value[i]
+			t_info += "%02x" % cfg.transponderinfocolor.value[i]
+			selectedfg += "%02x" % cfg.selectedfgcolor.value[i]
+			yellow += "%02x" % cfg.yellowcolor.value[i]
 			red += "%02x" % cfg.redcolor.value[i]
-			secfg += "%02x" % cfg.secondfgcolor.value[i]
-			fallb += "%02x" % cfg.fallbackcolor.value[i]
-			na += "%02x" % cfg.notavailablecolor.value[i]
-		return top, bas, sel, ti, selfg, yel, red, secfg, fallb, na
+			secondfg += "%02x" % cfg.secondfgcolor.value[i]
+			fallback += "%02x" % cfg.fallbackcolor.value[i]
+			notavailable += "%02x" % cfg.notavailablecolor.value[i]
+		return top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable
 
 	def keySave(self):
 		self.setSkinPath()
@@ -413,8 +397,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	</windowstyle>\n"
 
 	def isWindowsStyle(self):
-		fi = open("%s.xml" % NAME, "r")
-		for line in fi:
-			if "<windowstyle id=\"0\" type=\"skinned\">" in line:
-				return True
+		root = ET.parse("%s.xml" % NAME).getroot()
+		style = root.find('windowstyle')
+		if style:
+			return True
 		return False
