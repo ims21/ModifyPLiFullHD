@@ -68,19 +68,31 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self["key_green"] = Label(_("Ok"))
 		self["key_red"] = Label(_("Cancel"))
 		self["key_blue"] = Label(_("Recreate"))
-		self["info"]= Label(_("For new version must be used \"recreate\" at first"))
+		self["info"]= Label()
+
 		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" v%s") % VERSION
+		self.recreated = False
+
 		self.setTitle(self.title)
-		
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
-		self.setMenu()
+		self.onLayoutFinish.append(self.setMenu)
 
 	def setMenu(self):
-		self.setSkinPath()
-		if self.testFile():
-			cfg.font.value = self.readFont()
-			self.getColors()
 		self.list = []
+		self["info"].setText("")
+		if not self.recreated:
+			self["info"].setText(_("For new version must be used \"recreate\" at first"))
+		self.setSkinPath()
+
+		if self.testFile():
+			if self.isParseable():
+				cfg.font.value = self.readFont()
+				self.readColors()
+			else:
+				self["info"].setText(_("Wrong format %s.xml") % NAME.replace("/etc/enigma2/",""))
+		else:
+			self.createUserSkinFile()
+
 		self.skin_name = _("Skin")
 		self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
 		self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
@@ -94,7 +106,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("Red color (a,r,g,b)"), cfg.redcolor))
 		self.list.append(getConfigListEntry(_("Fallback color (a,r,g,b)"), cfg.fallbackcolor))
 		self.list.append(getConfigListEntry(_("Notavailable color (a,r,g,b)"), cfg.notavailablecolor))
-
 
 		self["config"].list = self.list
 
@@ -113,7 +124,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		try:
 			fi = open("%s.xml" % NAME, "r")
 		except:
-			self.createUserSkinFile()
 			return False
 		else:
 			fi.close()
@@ -194,7 +204,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					return "LiberationSans-BoldItalic"
 		return "nmsbd"
 
-	def getColors(self):
+	def readColors(self):
 		root = ET.parse("%s.xml" % NAME).getroot()
 		colors = root.find('colors')
 		for color in colors:
@@ -273,7 +283,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def callbackRecreate(self, answer):
 		if answer:
 			os.rename("%s.xml" % NAME, "%s.bak" % NAME)
+			self.createUserSkinFile()
 			self.setMenu()
+
+	def error(self):
+		errorbox = self.session.openWithCallback(self.callbackError, MessageBox, _("Problem with format in:\n%s?") % (NAME+".xml"))
+		errorbox.setTitle(_("Modify PLi-FullHD - ERROR"))
+	def callbackError(self, answer):
+		self.close()
 		
 	def createUserSkinFile(self):
 		fi=open("%s.xml" % NAME, "w")
@@ -298,6 +315,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.windowStyleCode())
 		fi.write(self.skinEnd())
 		fi.close()
+		self.recreated = True
 
 	def deleteUserSkinFile(self):
 		os.unlink("%s.xml" % NAME)
@@ -387,3 +405,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		if windowstyle:
 			return True
 		return False
+	def isParseable(self):
+		try:
+			root = ET.parse("%s.xml" % NAME).getroot()
+		except:
+			return False
+		else:
+			return True
