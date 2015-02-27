@@ -61,9 +61,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				"cancel": self.keyCancel,
 				"red": self.keyCancel,
 				"green": self.keySave,
+				"yellow": self.reloadSkin,
 				"blue": self.recreate,
 				"ok": self.keySave,
 			}, -2)
+		self.newColors = {}
+		self.newColorsKeys = self.newColors.keys()
 
 		self["key_green"] = Label(_("Ok"))
 		self["key_red"] = Label(_("Cancel"))
@@ -72,6 +75,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" v%s") % VERSION
 		self.recreated = False
+		self.wrong_xml = False
 
 		self.setTitle(self.title)
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
@@ -89,7 +93,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.font.value = self.readFont()
 				self.readColors()
 			else:
-				self["info"].setText(_("Wrong format %s.xml") % NAME.replace("/etc/enigma2/",""))
+				self["info"].setText(_("!!! Invalid format: %s.xml. Repair or recreate !!!") % NAME.replace("/etc/enigma2/",""))
 		else:
 			self.createUserSkinFile()
 
@@ -99,10 +103,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("Top color (a,r,g,b)"), cfg.toptemplatecolor))
 		self.list.append(getConfigListEntry(_("Bottom color (a,r,g,b)"), cfg.basictemplatecolor))
 		self.list.append(getConfigListEntry(_("Selector color (a,r,g,b)"), cfg.selectorcolor))
-		self.list.append(getConfigListEntry(_("TransponderInfo color (a,r,g,b)"), cfg.transponderinfocolor))
-		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
 		self.list.append(getConfigListEntry(_("SelectedFG color (a,r,g,b)"), cfg.selectedfgcolor))
+		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
 		self.list.append(getConfigListEntry(_("Yellow color (a,r,g,b)"), cfg.yellowcolor))
+		self.list.append(getConfigListEntry(_("TransponderInfo color (a,r,g,b)"), cfg.transponderinfocolor))
 		self.list.append(getConfigListEntry(_("Red color (a,r,g,b)"), cfg.redcolor))
 		self.list.append(getConfigListEntry(_("Fallback color (a,r,g,b)"), cfg.fallbackcolor))
 		self.list.append(getConfigListEntry(_("Notavailable color (a,r,g,b)"), cfg.notavailablecolor))
@@ -129,57 +133,58 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			fi.close()
 			return True
 
-	def setNewParameters(self):
+	def saveNewParameters(self):
 		used_font = self.readFont()
 		print "[ModifyPLiFullHD] set font %s instead of %s (%s)" % (cfg.font.value, used_font, cfg.font.description[used_font])
 		os.rename("%s.xml" % NAME, "%s.tmp" % NAME)
 		fi = open("%s.tmp" % NAME, "r")
 		fo = open("%s.xml" % NAME, "w")
-		top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable = self.cfg2hexstring()
+		top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable = self.getConfigValues()
 		for line in fi:
+			# font:
 			if "<font name=\"Regular\" filename=" in line:
 				line = line.replace(used_font, cfg.font.value)
-
+			# colors:
 			if "<color name=\"toptemplatecolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % top)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % top)
 			if "<color name=\"basictemplatecolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % bottom)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % bottom)
 			if "<color name=\"selectorcolor\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % selector)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % selector)
 			if "<color name=\"transponderinfo\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % t_info)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % t_info)
 			if "<color name=\"selectedFG\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % selectedfg)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % selectedfg)
 			if "<color name=\"yellow\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % yellow)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % yellow)
 			if "<color name=\"red\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % red)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % red)
 			if "<color name=\"secondFG\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % secondfg)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % secondfg)
 			if "<color name=\"fallback\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % fallback)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % fallback)
 			if "<color name=\"notavailable\" value=\"#" in line:
-				pos = line.find("\"#")
-				colors = line[pos+2:pos+10]
-				line = line.replace("%s" %colors ,"%s" % notavailable)
+				pos = line.find("\"#") + 2
+				colors = line[pos:pos+8]
+				line = line.replace("%s" %colors, "%s" % notavailable)
 			fo.write(line)
 		fo.close()
 		fi.close()
@@ -234,29 +239,37 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def mapping(self, colorstring):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
 
-	def cfg2hexstring(self):
-		top = bottom = selector = t_info = selectedfg = yellow = red = secondfg = fallback = notavailable = ""
-		for i in range(0,4):
-			top += "%02x" % cfg.toptemplatecolor.value[i]
-			bottom += "%02x" % cfg.basictemplatecolor.value[i]
-			selector += "%02x" % cfg.selectorcolor.value[i]
-			t_info += "%02x" % cfg.transponderinfocolor.value[i]
-			selectedfg += "%02x" % cfg.selectedfgcolor.value[i]
-			yellow += "%02x" % cfg.yellowcolor.value[i]
-			red += "%02x" % cfg.redcolor.value[i]
-			secondfg += "%02x" % cfg.secondfgcolor.value[i]
-			fallback += "%02x" % cfg.fallbackcolor.value[i]
-			notavailable += "%02x" % cfg.notavailablecolor.value[i]
+	def getConfigValues(self):
+		top = self.l2h(cfg.toptemplatecolor.value)
+		bottom = self.l2h(cfg.basictemplatecolor.value)
+		selector = self.l2h(cfg.selectorcolor.value)
+		t_info = self.l2h(cfg.transponderinfocolor.value)
+		selectedfg = self.l2h(cfg.selectedfgcolor.value)
+		yellow = self.l2h(cfg.yellowcolor.value)
+		red = self.l2h(cfg.redcolor.value)
+		secondfg = self.l2h(cfg.secondfgcolor.value)
+		fallback = self.l2h(cfg.fallbackcolor.value)
+		notavailable = self.l2h(cfg.notavailablecolor.value)
+
 		return top, bottom, selector, t_info, selectedfg, yellow, red, secondfg, fallback, notavailable
 
+	def l2h(self, value):
+		x = ""
+		for i in range(0,4):
+			x += "%02x" % value[i]
+		return 	x
+
 	def keySave(self):
-		self.setSkinPath()
-		self.setNewParameters()
-		if self.current_skin == cfg.skin.description[cfg.skin.value] and self["config"].isChanged():
-			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
-			restartbox.setTitle(self.title)
+		if not self.wrong_xml:
+			self.setSkinPath()
+			self.saveNewParameters()
+			if self.current_skin == cfg.skin.description[cfg.skin.value] and self["config"].isChanged():
+				restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
+				restartbox.setTitle(self.title)
+			else:
+				self.close()
 		else:
-			self.close()
+			self.error()
 
 	def applyCallback(self, answer):
 		if answer:
@@ -277,7 +290,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close()
 
 	def recreate(self):
-		restartbox = self.session.openWithCallback(self.callbackRecreate, MessageBox, _("Are you sure delete and create new:\n%s?") % (NAME+".xml"))
+		restartbox = self.session.openWithCallback(self.callbackRecreate, MessageBox, _("Are you sure delete and create new:\n\n%s?") % (NAME+".xml"))
 		restartbox.setTitle(_("Modify PLi-FullHD - recreate user skin file"))
 
 	def callbackRecreate(self, answer):
@@ -287,11 +300,11 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.setMenu()
 
 	def error(self):
-		errorbox = self.session.openWithCallback(self.callbackError, MessageBox, _("Problem with format in:\n%s?") % (NAME+".xml"))
+		errorbox = self.session.openWithCallback(self.callbackError, MessageBox, _("Problem with format in:\n\n%s") % (NAME+".xml"), MessageBox.TYPE_ERROR )
 		errorbox.setTitle(_("Modify PLi-FullHD - ERROR"))
 	def callbackError(self, answer):
-		self.close()
-		
+		self.recreate()
+
 	def createUserSkinFile(self):
 		fi=open("%s.xml" % NAME, "w")
 		fi.write(self.skinBegin())
@@ -315,7 +328,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.windowStyleCode())
 		fi.write(self.skinEnd())
 		fi.close()
+
 		self.recreated = True
+		self.wrong_xml = False
 
 	def deleteUserSkinFile(self):
 		os.unlink("%s.xml" % NAME)
@@ -409,6 +424,64 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		try:
 			root = ET.parse("%s.xml" % NAME).getroot()
 		except:
+			self.wrong_xml = True
 			return False
 		else:
+			self.wrong_xml = False
 			return True
+	def colorDict(self):
+		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, red, secondFG, fallback, notavailable = self.getConfigValues()
+		self.newColors = {
+			'toptemplatecolor': toptemplatecolor,
+			'basictemplatecolor': basictemplatecolor,
+			'selectorcolor': selectorcolor,
+			'transponderinfo': transponderinfo,
+			'selectedFG': selectedFG, 
+			'yellow': yellow,
+			'red': red,
+			'secondFG': secondFG,
+			'fallback': fallback,
+			'notavailable': notavailable
+		}
+		self.newColorsKeys = self.newColors.keys()
+
+	def changeColorsOnline(self):
+		self.setSkinPath()
+		self.saveNewParameters()
+		import skin
+		import enigma
+		self.colorDict()
+		for n in skin.colorNames:
+			if n in self.newColors.keys():
+				skin.colorNames[n] = enigma.gRGB(int(self.newColors[n], 0x10))
+
+	def reloadSkin(self):
+		if self.wrong_xml:
+			self.error()
+			return
+		import skin
+		import enigma
+		from Tools.Directories import resolveFilename, SCOPE_CONFIG
+
+		self.setSkinPath()
+		self.saveNewParameters()
+
+		filename = resolveFilename(SCOPE_CONFIG, "%s.xml" % NAME.replace("/etc/enigma2/",""))
+		path = os.path.dirname(filename) + "/"
+		root = ET.parse(filename).getroot()
+		skin.loadSingleSkinData(enigma.getDesktop(0), root, path)
+		for elem in root:
+			if elem.tag == 'screen':
+				name = elem.attrib.get('name', None)
+				if name:
+					sid = elem.attrib.get('id', None)
+					if sid and (sid != skin.display_skin_id):
+						elem.clear()
+						continue
+					if name in skin.dom_screens:
+						skin.dom_screens[name][0].clear()
+					skin.dom_screens[name] = (elem, path)
+				else:
+					elem.clear()
+			else:
+				elem.clear()

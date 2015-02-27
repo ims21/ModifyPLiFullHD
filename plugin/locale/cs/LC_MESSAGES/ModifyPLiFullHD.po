@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Modify PLi-FullHD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-24 18:34+0100\n"
-"PO-Revision-Date: 2015-02-24 20:16+0100\n"
+"POT-Creation-Date: 2015-02-27 14:46+0100\n"
+"PO-Revision-Date: 2015-02-27 14:50+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: \n"
@@ -56,15 +56,19 @@ msgstr "Zavřít"
 msgid "Recreate"
 msgstr "Znovu vytvořit"
 
-msgid "For new version must be used \"recreate\" at first"
-msgstr "S každou novou verzí musí být nejdříve použito  \"Znovu vytvořit\" "
-
 msgid "Modify PLi-FullHD - setup font and colors"
 msgstr "Modify PLi-FullHD - nastavení fontu a barev"
 
 #, python-format
 msgid " v%s"
 msgstr ""
+
+msgid "For new version must be used \"recreate\" at first"
+msgstr "S každou novou verzí musí být nejdříve použito  \"Znovu vytvořit\" "
+
+#, python-format
+msgid "!!! Invalid format: %s.xml. Repair or recreate !!!"
+msgstr "!!! Neplatný formát: %s.xml. Opravit nebo znovu vytvořit !!!"
 
 #
 msgid "Skin"
@@ -82,16 +86,25 @@ msgstr ""
 msgid "Selector color (a,r,g,b)"
 msgstr ""
 
-msgid "TransponderInfo color (a,r,g,b)"
+msgid "SelectedFG color (a,r,g,b)"
 msgstr ""
 
-msgid "SelectedFG color (a,r,g,b)"
+msgid "SecondFG color (a,r,g,b)"
 msgstr ""
 
 msgid "Yellow color (a,r,g,b)"
 msgstr ""
 
-msgid "SecondFG color (a,r,g,b)"
+msgid "TransponderInfo color (a,r,g,b)"
+msgstr ""
+
+msgid "Red color (a,r,g,b)"
+msgstr ""
+
+msgid "Fallback color (a,r,g,b)"
+msgstr ""
+
+msgid "Notavailable color (a,r,g,b)"
 msgstr ""
 
 #
@@ -109,11 +122,26 @@ msgstr "Opravdu zavřít bez uloženého nastavení?"
 #, python-format
 msgid ""
 "Are you sure delete and create new:\n"
+"\n"
 "%s?"
 msgstr ""
 "Opravdu chcete smazat a vytvořit nový:\n"
+"\n"
 "%s?"
 
 msgid "Modify PLi-FullHD - recreate user skin file"
 msgstr "Modify PLi-FullHD - nové vytvoření souboru"
+
+#, python-format
+msgid ""
+"Problem with format in:\n"
+"\n"
+"%s"
+msgstr ""
+"Problém s obsahem:\n"
+"\n"
+"%s"
+
+msgid "Modify PLi-FullHD - ERROR"
+msgstr "Modifikace PLi-FullHD - CHYBA"
 
