@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-27 14:46+0100\n"
+"POT-Creation-Date: 2015-02-28 12:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,27 +21,6 @@ msgid "Modify PLi-FullHD"
 msgstr ""
 
 msgid "Change regular font and colors in PLi-FullHD/PLi-HD1 skin"
-msgstr ""
-
-msgid "PLi-FullHD"
-msgstr ""
-
-msgid "PLi-HD1"
-msgstr ""
-
-msgid "Nemesis Bold Regular"
-msgstr ""
-
-msgid "LiberationSans Regular"
-msgstr ""
-
-msgid "LiberationSans Italic"
-msgstr ""
-
-msgid "LiberationSans Bold"
-msgstr ""
-
-msgid "LiberationSans Bold Italic"
 msgstr ""
 
 msgid "Ok"
@@ -57,14 +36,15 @@ msgid "Modify PLi-FullHD - setup font and colors"
 msgstr ""
 
 #, python-format
-msgid " v%s"
+msgid " - v.%s"
 msgstr ""
 
-msgid "For new version must be used \"recreate\" at first"
+msgid ""
+"When in new version was added new items, then use \"recreate\" at first."
 msgstr ""
 
 #, python-format
-msgid "!!! Invalid format: %s.xml. Repair or recreate !!!"
+msgid "!!! Invalid format: %s.xml. Repair it or recreate !!!"
 msgstr ""
 
 msgid "Skin"
@@ -73,34 +53,34 @@ msgstr ""
 msgid "Regular font"
 msgstr ""
 
-msgid "Top color (a,r,g,b)"
+msgid "Top color  (a,r,g,b)"
 msgstr ""
 
-msgid "Bottom color (a,r,g,b)"
+msgid "Bottom color  (a,r,g,b)"
 msgstr ""
 
-msgid "Selector color (a,r,g,b)"
+msgid "Selector color  (a,r,g,b)"
 msgstr ""
 
-msgid "SelectedFG color (a,r,g,b)"
+msgid "SelectedFG color  (a,r,g,b)"
 msgstr ""
 
-msgid "SecondFG color (a,r,g,b)"
+msgid "SecondFG color  (a,r,g,b)"
 msgstr ""
 
-msgid "Yellow color (a,r,g,b)"
+msgid "Yellow color  (a,r,g,b)"
 msgstr ""
 
-msgid "TransponderInfo color (a,r,g,b)"
+msgid "TransponderInfo color  (a,r,g,b)"
 msgstr ""
 
-msgid "Red color (a,r,g,b)"
+msgid "Red color  (a,r,g,b)"
 msgstr ""
 
-msgid "Fallback color (a,r,g,b)"
+msgid "Fallback color  (a,r,g,b)"
 msgstr ""
 
-msgid "Notavailable color (a,r,g,b)"
+msgid "Notavailable color  (a,r,g,b)"
 msgstr ""
 
 msgid ""
@@ -115,7 +95,12 @@ msgstr ""
 msgid ""
 "Are you sure delete and create new:\n"
 "\n"
-"%s?"
+"%s?\n"
+"\n"
+"Be careful if you are using some own things in this file. Do not forget put "
+"it back to newly created file again. Original file will be stored to:\n"
+"\n"
+"%s"
 msgstr ""
 
 msgid "Modify PLi-FullHD - recreate user skin file"

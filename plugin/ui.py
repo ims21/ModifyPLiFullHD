@@ -14,13 +14,13 @@ import os
 import xml.etree.cElementTree as ET
 
 config.plugins.ModifyPLiFullHD = ConfigSubsection()
-config.plugins.ModifyPLiFullHD.skin = NoSave(ConfigSelection(default = "fullhd", choices = [("fullhd",_("PLi-FullHD")),("hd1",_("PLi-HD1"))]))
+config.plugins.ModifyPLiFullHD.skin = NoSave(ConfigSelection(default = "fullhd", choices = [("fullhd","PLi-FullHD"),("hd1","PLi-HD1")]))
 config.plugins.ModifyPLiFullHD.font = NoSave(ConfigSelection(default = "nmsbd", choices = [
-	("nmsbd",_("Nemesis Bold Regular")),
-	("LiberationSans-Regular",_("LiberationSans Regular")),
-	("LiberationSans-Italic",_("LiberationSans Italic")),
-	("LiberationSans-Bold",_("LiberationSans Bold")),
-	("LiberationSans-BoldItalic",_("LiberationSans Bold Italic"))
+	("nmsbd","Nemesis Bold Regular"),
+	("LiberationSans-Regular","LiberationSans Regular"),
+	("LiberationSans-Italic","LiberationSans Italic"),
+	("LiberationSans-Bold","LiberationSans Bold"),
+	("LiberationSans-BoldItalic","LiberationSans Bold Italic")
 	]))
 config.plugins.ModifyPLiFullHD.toptemplatecolor = NoSave(ConfigIP(default=[0,0,0,48]))
 config.plugins.ModifyPLiFullHD.basictemplatecolor = NoSave(ConfigIP(default=[0,0,0,32]))
@@ -73,7 +73,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self["key_blue"] = Label(_("Recreate"))
 		self["info"]= Label()
 
-		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" v%s") % VERSION
+		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" - v.%s") % VERSION
 		self.recreated = False
 		self.wrong_xml = False
 
@@ -84,32 +84,33 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def setMenu(self):
 		self.list = []
 		self["info"].setText("")
-		if not self.recreated:
-			self["info"].setText(_("For new version must be used \"recreate\" at first"))
+
 		self.setSkinPath()
 
 		if self.testFile():
+			if not self.recreated:
+				self["info"].setText(_("When in new version was added new items, then use \"recreate\" at first."))
 			if self.isParseable():
 				cfg.font.value = self.readFont()
 				self.readColors()
 			else:
-				self["info"].setText(_("!!! Invalid format: %s.xml. Repair or recreate !!!") % NAME.replace("/etc/enigma2/",""))
+				self["info"].setText(_("!!! Invalid format: %s.xml. Repair it or recreate !!!") % NAME.replace("/etc/enigma2/",""))
 		else:
 			self.createUserSkinFile()
 
 		self.skin_name = _("Skin")
 		self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
 		self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
-		self.list.append(getConfigListEntry(_("Top color (a,r,g,b)"), cfg.toptemplatecolor))
-		self.list.append(getConfigListEntry(_("Bottom color (a,r,g,b)"), cfg.basictemplatecolor))
-		self.list.append(getConfigListEntry(_("Selector color (a,r,g,b)"), cfg.selectorcolor))
-		self.list.append(getConfigListEntry(_("SelectedFG color (a,r,g,b)"), cfg.selectedfgcolor))
-		self.list.append(getConfigListEntry(_("SecondFG color (a,r,g,b)"), cfg.secondfgcolor))
-		self.list.append(getConfigListEntry(_("Yellow color (a,r,g,b)"), cfg.yellowcolor))
-		self.list.append(getConfigListEntry(_("TransponderInfo color (a,r,g,b)"), cfg.transponderinfocolor))
-		self.list.append(getConfigListEntry(_("Red color (a,r,g,b)"), cfg.redcolor))
-		self.list.append(getConfigListEntry(_("Fallback color (a,r,g,b)"), cfg.fallbackcolor))
-		self.list.append(getConfigListEntry(_("Notavailable color (a,r,g,b)"), cfg.notavailablecolor))
+		self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
+		self.list.append(getConfigListEntry(_("Bottom color  (a,r,g,b)"), cfg.basictemplatecolor))
+		self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
+		self.list.append(getConfigListEntry(_("SelectedFG color  (a,r,g,b)"), cfg.selectedfgcolor))
+		self.list.append(getConfigListEntry(_("SecondFG color  (a,r,g,b)"), cfg.secondfgcolor))
+		self.list.append(getConfigListEntry(_("Yellow color  (a,r,g,b)"), cfg.yellowcolor))
+		self.list.append(getConfigListEntry(_("TransponderInfo color  (a,r,g,b)"), cfg.transponderinfocolor))
+		self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
+		self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
+		self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
 
 		self["config"].list = self.list
 
@@ -290,11 +291,16 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close()
 
 	def recreate(self):
-		restartbox = self.session.openWithCallback(self.callbackRecreate, MessageBox, _("Are you sure delete and create new:\n\n%s?") % (NAME+".xml"))
+		msg = _("Are you sure delete and create new:\n\n%s?\n\nBe careful if you are using some own things in this file. Do not forget put it back to newly created file again. Original file will be stored to:\n\n%s") % (NAME+".xml", NAME+".bak")
+		restartbox = self.session.openWithCallback(self.callbackRecreate,MessageBox, msg)
 		restartbox.setTitle(_("Modify PLi-FullHD - recreate user skin file"))
 
 	def callbackRecreate(self, answer):
 		if answer:
+			try:
+				os.rename("%s.bak" % NAME, "%s.old" % NAME)
+			except:
+				pass
 			os.rename("%s.xml" % NAME, "%s.bak" % NAME)
 			self.createUserSkinFile()
 			self.setMenu()

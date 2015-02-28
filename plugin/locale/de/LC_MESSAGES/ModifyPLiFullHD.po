@@ -19,37 +19,34 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 
 msgid "Modify PLi-FullHD"
-msgstr "Modifikace PLi-FullHD"
+msgstr ""
 
 msgid "Change regular font and colors in PLi-FullHD/PLi-HD1 skin"
-msgstr "Změny základního fontu a barev pro PLi-FullHD/PLi-HD1 skin"
+msgstr ""
 
 msgid "Ok"
 msgstr ""
 
-#
 msgid "Cancel"
-msgstr "Zavřít"
+msgstr ""
 
-#
 msgid "Recreate"
-msgstr "Znovu vytvořit"
+msgstr ""
 
 msgid "Modify PLi-FullHD - setup font and colors"
-msgstr "Modify PLi-FullHD - nastavení fontu a barev"
+msgstr ""
 
 #, python-format
 msgid " - v.%s"
 msgstr ""
 
 msgid "When in new version was added new items, then use \"recreate\" at first."
-msgstr "Jestliže byly v nové verzi přidané položky, použijte  \"Znovu vytvořit\" ."
+msgstr ""
 
 #, python-format
 msgid "!!! Invalid format: %s.xml. Repair it or recreate !!!"
-msgstr "!!! Neplatný formát: %s.xml. Opravte nebo znovu vytvořte !!!"
+msgstr ""
 
-#
 msgid "Skin"
 msgstr ""
 
@@ -86,17 +83,13 @@ msgstr ""
 msgid "Notavailable color  (a,r,g,b)"
 msgstr ""
 
-#
 msgid ""
 "GUI needs a restart to apply a new skin\n"
 "Do you want to restart the GUI now?"
 msgstr ""
-"Pro uplatnění změn ve skinu je potřeba restartovat GUI\n"
-"Chcete nyní restartovat GUI?"
 
-#
 msgid "Really close without apply changes?"
-msgstr "Opravdu zavřít bez uloženého nastavení?"
+msgstr ""
 
 #, python-format
 msgid ""
@@ -108,16 +101,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Opravdu chcete smazat a vytvořit nový:\n"
-"\n"
-"%s?\n"
-"\n"
-"Dejte pozor, jestliže používáte v tomto souboru nějaké vlastní nastavení. Nezapomeňte je vrátit do nově založeného souboru. Původní soubor bude uložen do:\n"
-"\n"
-"%s"
 
 msgid "Modify PLi-FullHD - recreate user skin file"
-msgstr "Modify PLi-FullHD - nové vytvoření souboru"
+msgstr ""
 
 #, python-format
 msgid ""
@@ -125,18 +111,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Problém s obsahem:\n"
-"\n"
-"%s"
 
 msgid "Modify PLi-FullHD - ERROR"
-msgstr "Modifikace PLi-FullHD - CHYBA"
+msgstr ""
 
-#~ msgid ""
-#~ "Are you sure delete and create new:\n"
-#~ "\n"
-#~ "%s?"
-#~ msgstr ""
-#~ "Opravdu chcete smazat a vytvořit nový:\n"
-#~ "\n"
-#~ "%s?"
