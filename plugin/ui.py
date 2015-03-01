@@ -434,6 +434,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		else:
 			self.wrong_xml = False
 			return True
+
 	def colorDict(self):
 		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, red, secondFG, fallback, notavailable = self.getConfigValues()
 		self.newColors = {
@@ -490,10 +491,4 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					elem.clear()
 			else:
 				elem.clear()
-
-	def test(self):
-		from Screens.ChannelSelection import ChannelSelection
-		dlg = self.session.open(ChannelSelection)
-		if dlg is None:
-			return
-		dlg.applySkin()
+		self.close()
