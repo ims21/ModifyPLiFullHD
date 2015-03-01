@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-28 12:30+0100\n"
+"POT-Creation-Date: 2015-03-01 19:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-msgid "Recreate"
+msgid "Font"
 msgstr ""
 
 msgid "Modify PLi-FullHD - setup font and colors"
@@ -39,12 +39,11 @@ msgstr ""
 msgid " - v.%s"
 msgstr ""
 
-msgid ""
-"When in new version was added new items, then use \"recreate\" at first."
+#, python-format
+msgid "!!! Invalid format: %s.xml, not used !!!"
 msgstr ""
 
-#, python-format
-msgid "!!! Invalid format: %s.xml. Repair it or recreate !!!"
+msgid "Use modify skin"
 msgstr ""
 
 msgid "Skin"
@@ -89,29 +88,4 @@ msgid ""
 msgstr ""
 
 msgid "Really close without apply changes?"
-msgstr ""
-
-#, python-format
-msgid ""
-"Are you sure delete and create new:\n"
-"\n"
-"%s?\n"
-"\n"
-"Be careful if you are using some own things in this file. Do not forget put "
-"it back to newly created file again. Original file will be stored to:\n"
-"\n"
-"%s"
-msgstr ""
-
-msgid "Modify PLi-FullHD - recreate user skin file"
-msgstr ""
-
-#, python-format
-msgid ""
-"Problem with format in:\n"
-"\n"
-"%s"
-msgstr ""
-
-msgid "Modify PLi-FullHD - ERROR"
 msgstr ""

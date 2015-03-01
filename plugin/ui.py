@@ -10,10 +10,11 @@ from Screens.Standby import TryQuitMainloop
 from Screens.MessageBox import MessageBox
 from plugin import VERSION
 import os
-
+import skin
+import enigma
+from Tools.Directories import resolveFilename, SCOPE_CONFIG
 import xml.etree.cElementTree as ET
 
-config.plugins.ModifyPLiFullHD = ConfigSubsection()
 config.plugins.ModifyPLiFullHD.skin = NoSave(ConfigSelection(default = "fullhd", choices = [("fullhd","PLi-FullHD"),("hd1","PLi-HD1")]))
 config.plugins.ModifyPLiFullHD.font = NoSave(ConfigSelection(default = "nmsbd", choices = [
 	("nmsbd","Nemesis Bold Regular"),
@@ -35,7 +36,9 @@ config.plugins.ModifyPLiFullHD.notavailablecolor = NoSave(ConfigIP(default=[0,94
 
 cfg = config.plugins.ModifyPLiFullHD
 
-NAME = "/etc/enigma2/skin_user_PLi-FullHD"
+NAME = "/etc/enigma2/PLi-FullHD_Pars"
+
+reload_skin_on_start = True
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
@@ -61,19 +64,17 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				"cancel": self.keyCancel,
 				"red": self.keyCancel,
 				"green": self.keySave,
-				"yellow": self.reloadSkin,
-				"blue": self.recreate,
+				"blue": self.applyFont,
 			}, -2)
 		self.newColors = {}
 		self.newColorsKeys = self.newColors.keys()
 
 		self["key_green"] = Label(_("Ok"))
 		self["key_red"] = Label(_("Cancel"))
-		self["key_blue"] = Label(_("Recreate"))
+		self["key_blue"] = Label(_("Font"))
 		self["info"]= Label()
 
 		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" - v.%s") % VERSION
-		self.recreated = False
 		self.wrong_xml = False
 
 		self.setTitle(self.title)
@@ -87,42 +88,43 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.setSkinPath()
 
 		if self.testFile():
-			if not self.recreated:
-				self["info"].setText(_("When in new version was added new items, then use \"recreate\" at first."))
 			if self.isParseable():
 				cfg.font.value = self.readFont()
 				self.readColors()
 			else:
-				self["info"].setText(_("!!! Invalid format: %s.xml. Repair it or recreate !!!") % NAME.replace("/etc/enigma2/",""))
+				self["info"].setText(_("!!! Invalid format: %s.xml, not used !!!") % NAME.replace("/etc/enigma2/",""))
 		else:
 			self.createUserSkinFile()
 
+		self.skin_enabled = _("Use modify skin")
 		self.skin_name = _("Skin")
-		self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
-		self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
-		self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
-		self.list.append(getConfigListEntry(_("Bottom color  (a,r,g,b)"), cfg.basictemplatecolor))
-		self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
-		self.list.append(getConfigListEntry(_("SelectedFG color  (a,r,g,b)"), cfg.selectedfgcolor))
-		self.list.append(getConfigListEntry(_("SecondFG color  (a,r,g,b)"), cfg.secondfgcolor))
-		self.list.append(getConfigListEntry(_("Yellow color  (a,r,g,b)"), cfg.yellowcolor))
-		self.list.append(getConfigListEntry(_("TransponderInfo color  (a,r,g,b)"), cfg.transponderinfocolor))
-		self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
-		self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
-		self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
+		self.list.append(getConfigListEntry(self.skin_enabled ,cfg.enabled))
+		if cfg.enabled.value:
+			self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
+			self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
+			self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
+			self.list.append(getConfigListEntry(_("Bottom color  (a,r,g,b)"), cfg.basictemplatecolor))
+			self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
+			self.list.append(getConfigListEntry(_("SelectedFG color  (a,r,g,b)"), cfg.selectedfgcolor))
+			self.list.append(getConfigListEntry(_("SecondFG color  (a,r,g,b)"), cfg.secondfgcolor))
+			self.list.append(getConfigListEntry(_("Yellow color  (a,r,g,b)"), cfg.yellowcolor))
+			self.list.append(getConfigListEntry(_("TransponderInfo color  (a,r,g,b)"), cfg.transponderinfocolor))
+			self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
+			self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
+			self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
 
 		self["config"].list = self.list
 
 	def changedEntry(self):
-		if self["config"].getCurrent()[0] is self.skin_name:
+		if self["config"].getCurrent()[0] is self.skin_name or self["config"].getCurrent()[0] is self.skin_enabled:
 			self.setMenu()
 
 	def setSkinPath(self):
 		global NAME
 		if cfg.skin.value == "hd1":
-			NAME = "/etc/enigma2/skin_user_PLi-HD1"
+			NAME = "/etc/enigma2/PLi-HD1_Pars"
 		else:
-			NAME = "/etc/enigma2/skin_user_PLi-FullHD"
+			NAME = "/etc/enigma2/PLi-FullHD_Pars"
 
 	def testFile(self):
 		try:
@@ -260,16 +262,15 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return 	x
 
 	def keySave(self):
-		if not self.wrong_xml:
-			self.setSkinPath()
-			self.saveNewParameters()
-			if self.current_skin == cfg.skin.description[cfg.skin.value] and self["config"].isChanged():
-				restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
-				restartbox.setTitle(self.title)
-			else:
-				self.close()
+		self.setSkinPath()
+		self.saveNewParameters()
+		if self.current_skin == cfg.skin.description[cfg.skin.value] and self["config"].isChanged():
+			cfg.enabled.save()
+			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
+			restartbox.setTitle(self.title)
 		else:
-			self.error()
+			cfg.enabled.save()
+			self.close()
 
 	def applyCallback(self, answer):
 		if answer:
@@ -289,29 +290,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				x[1].cancel()
 			self.close()
 
-	def recreate(self):
-		msg = _("Are you sure delete and create new:\n\n%s?\n\nBe careful if you are using some own things in this file. Do not forget put it back to newly created file again. Original file will be stored to:\n\n%s") % (NAME+".xml", NAME+".bak")
-		restartbox = self.session.openWithCallback(self.callbackRecreate,MessageBox, msg)
-		restartbox.setTitle(_("Modify PLi-FullHD - recreate user skin file"))
-
-	def callbackRecreate(self, answer):
-		if answer:
-			try:
-				os.rename("%s.bak" % NAME, "%s.old" % NAME)
-			except:
-				pass
-			os.rename("%s.xml" % NAME, "%s.bak" % NAME)
-			self.createUserSkinFile()
-			self.setMenu()
-
-	def error(self):
-		errorbox = self.session.openWithCallback(self.callbackError, MessageBox, _("Problem with format in:\n\n%s") % (NAME+".xml"), MessageBox.TYPE_ERROR )
-		errorbox.setTitle(_("Modify PLi-FullHD - ERROR"))
-	def callbackError(self, answer):
-		self.recreate()
-
 	def createUserSkinFile(self):
 		fi=open("%s.xml" % NAME, "w")
+		fi.write(self.note())
 		fi.write(self.skinBegin())
 		fi.write(self.fontsBegin())
 		fi.write(self.fontName())
@@ -334,12 +315,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		fi.write(self.skinEnd())
 		fi.close()
 
-		self.recreated = True
 		self.wrong_xml = False
 
 	def deleteUserSkinFile(self):
 		os.unlink("%s.xml" % NAME)
 
+	def note(self):
+		return "<!-- USE THIS FILE FOR MAIN SKIN\'s PARAMETERS ONLY ! -->\n"
 	def skinBegin(self):
 		return "<skin>\n"
 	def skinEnd(self):
@@ -429,6 +411,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		try:
 			root = ET.parse("%s.xml" % NAME).getroot()
 		except:
+			print "[ModifyPLiFullHD] ERROR - file %s.xml corrupted ?" % NAME
 			self.wrong_xml = True
 			return False
 		else:
@@ -461,17 +444,25 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if n in self.newColors.keys():
 				skin.colorNames[n] = enigma.gRGB(int(self.newColors[n], 0x10))
 
-	def reloadSkin(self):
-		if self.wrong_xml:
-			self.error()
-			return
-		import skin
-		import enigma
-		from Tools.Directories import resolveFilename, SCOPE_CONFIG
-
+	def applyFont(self):
+		cfg.enabled.save()
 		self.setSkinPath()
 		self.saveNewParameters()
+		self.reloadSkin()
+		self.close()
 
+	def disableAutorun(self):
+		global reload_skin_on_start
+		reload_skin_on_start = False
+
+	def applyAutorun(self):
+		self.disableAutorun()
+		self.setSkinPath()
+		if self.testFile():
+			if self.isParseable():
+				self.reloadSkin()
+
+	def reloadSkin(self):
 		filename = resolveFilename(SCOPE_CONFIG, "%s.xml" % NAME.replace("/etc/enigma2/",""))
 		path = os.path.dirname(filename) + "/"
 		root = ET.parse(filename).getroot()
@@ -491,4 +482,5 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					elem.clear()
 			else:
 				elem.clear()
-		self.close()
+
+modifyskin = ModifyPLiFullHD(Screen)
