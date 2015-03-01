@@ -53,7 +53,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self.list = []
 		self.onChangedEntry = []
-
+		self.session = session
 		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry )
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -63,7 +63,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				"green": self.keySave,
 				"yellow": self.reloadSkin,
 				"blue": self.recreate,
-				"ok": self.keySave,
 			}, -2)
 		self.newColors = {}
 		self.newColorsKeys = self.newColors.keys()
@@ -491,3 +490,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					elem.clear()
 			else:
 				elem.clear()
+
+	def test(self):
+		from Screens.ChannelSelection import ChannelSelection
+		dlg = self.session.open(ChannelSelection)
+		if dlg is None:
+			return
+		dlg.applySkin()
