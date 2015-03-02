@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Modify PLi-FullHD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-01 19:34+0100\n"
-"PO-Revision-Date: 2015-03-01 19:36+0100\n"
+"POT-Creation-Date: 2015-03-02 23:20+0100\n"
+"PO-Revision-Date: 2015-03-02 23:26+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: \n"
@@ -24,6 +24,18 @@ msgstr ""
 msgid "Change regular font and colors in PLi-FullHD/PLi-HD1 skin"
 msgstr ""
 
+msgid "both"
+msgstr ""
+
+msgid "left only"
+msgstr ""
+
+msgid "right only"
+msgstr ""
+
+msgid "none"
+msgstr ""
+
 msgid "Ok"
 msgstr ""
 
@@ -31,6 +43,9 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Font"
+msgstr ""
+
+msgid "Options"
 msgstr ""
 
 msgid "Modify PLi-FullHD - setup font and colors"
@@ -42,6 +57,9 @@ msgstr ""
 
 #, python-format
 msgid "!!! Invalid format: %s.xml, not used !!!"
+msgstr ""
+
+msgid "Was created new config file, restart for apply."
 msgstr ""
 
 msgid "Use modify skin"
@@ -56,10 +74,13 @@ msgstr ""
 msgid "Top color  (a,r,g,b)"
 msgstr ""
 
+msgid "Selector color  (a,r,g,b)"
+msgstr ""
+
 msgid "Bottom color  (a,r,g,b)"
 msgstr ""
 
-msgid "Selector color  (a,r,g,b)"
+msgid "Vertical selector's lines"
 msgstr ""
 
 msgid "SelectedFG color  (a,r,g,b)"
@@ -89,5 +110,17 @@ msgid ""
 msgstr ""
 
 msgid "Really close without apply changes?"
+msgstr ""
+
+msgid "Create new file with default values"
+msgstr ""
+
+msgid "Save current parameters"
+msgstr ""
+
+msgid "Delete file with parameters and close plugin"
+msgstr ""
+
+msgid "Operations with configuration file"
 msgstr ""
 
