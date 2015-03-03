@@ -349,6 +349,22 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return "%s/border/%s.png" % (cfg.skin.value, name)
 
 	def createDefaultCfgFile(self):
+
+		def indent(elem, level=0):
+			i = "\n" + level*"  "
+			if len(elem):
+				if not elem.text or not elem.text.strip():
+					elem.text = i + "  "
+				if not elem.tail or not elem.tail.strip():
+					elem.tail = i
+				for elem in elem:
+					indent(elem, level+1)
+				if not elem.tail or not elem.tail.strip():
+					elem.tail = i
+			else:
+				if level and (not elem.tail or not elem.tail.strip()):
+					elem.tail = i
+
 		root = ET.Element('skin')
 
 		fonts = ET.SubElement(root, 'fonts')
@@ -397,6 +413,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpLeft")
 		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpRight")
 
+		indent(root)
 		et = ET.ElementTree(root)
 		fo = open("%s.xml" % XML_NAME, "w")
 		et.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
