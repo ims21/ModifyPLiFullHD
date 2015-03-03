@@ -17,7 +17,7 @@ from Tools.Directories import resolveFilename, SCOPE_CONFIG
 import xml.etree.cElementTree as ET
 
 cfg = config.plugins.ModifyPLiFullHD
-cfg.skin = NoSave(ConfigSelection(default = "fullhd", choices = [("fullhd","PLi-FullHD"),("hd1","PLi-HD1")]))
+cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-HD1","PLi-HD1")]))
 cfg.font = NoSave(ConfigSelection(default = "nmsbd.ttf", choices = [
 	("nmsbd.ttf","Nemesis Bold Regular"),
 	("LiberationSans-Regular.ttf","LiberationSans Regular"),
@@ -82,6 +82,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self.setTitle(self.title)
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
+
+		cfg.skin.value = self.current_skin
 		self.onLayoutFinish.append(self.loadMenu)
 
 	def loadMenu(self):
@@ -127,7 +129,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def setSkinPath(self):
 		global XML_NAME
 		XML_NAME = "/etc/enigma2/PLi-FullHD_Pars"
-		if cfg.skin.value == "hd1":
+		if cfg.skin.value == "PLi-HD1":
 			XML_NAME = "/etc/enigma2/PLi-HD1_Pars"
 
 	def testFile(self):
@@ -242,7 +244,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def keySave(self):
 		self.setSkinPath()
 		self.saveParametersToFile()
-		if self["config"].isChanged() and self.current_skin == cfg.skin.description[cfg.skin.value]:
+		if self["config"].isChanged() and self.current_skin == cfg.skin.value:
 			self.saveConfig()
 			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
 			restartbox.setTitle(self.title)
@@ -344,7 +346,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				elem.clear()
 
 	def line(self, name):
-		return "%s/border/%s.png" % (cfg.skin.description[cfg.skin.value], name)
+		return "%s/border/%s.png" % (cfg.skin.value, name)
 
 	def createDefaultCfgFile(self):
 		root = ET.Element('skin')

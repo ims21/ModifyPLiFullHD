@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.16"
+VERSION = "1.17"
 #    Coded by ims (c)2015
 #
 #    This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ config.plugins.ModifyPLiFullHD.enabled = ConfigYesNo(default = False)
 
 def autostart(reason, **kwargs):
 	import ui
-	if reason == 0 and ui.reload_skin_on_start and config.plugins.ModifyPLiFullHD.enabled.value:
+	if reason == 0 and config.plugins.ModifyPLiFullHD.enabled.value and config.skin.primary_skin.value.split('/')[0] in ("PLi-FullHD", "PLi-HD1") and ui.reload_skin_on_start:
 		ui.modifyskin.applyAutorun()
 
 def main(session,**kwargs):
