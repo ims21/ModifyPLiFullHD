@@ -37,7 +37,8 @@ cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
 cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
 cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
 
-XML_NAME = "/etc/enigma2/PLi-FullHD_Pars"
+XML_NAME = "PLi-FullHD_Pars.xml"
+XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
 
 reload_skin_on_start = True
 
@@ -97,7 +98,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.font.value = self.parseFont()
 				self.parseColors()
 			else:
-				self["info"].setText(_("!!! Invalid format: %s.xml, not used !!!") % XML_NAME.replace("/etc/enigma2/",""))
+				self["info"].setText(_("!!! Invalid format: %s, not used !!!") % XML_NAME)
 		else:
 			self["info"].setText(_("Was created new config file, restart for apply."))
 			self.createDefaultCfgFile()
@@ -127,14 +128,15 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.loadMenu()
 
 	def setSkinPath(self):
-		global XML_NAME
-		XML_NAME = "/etc/enigma2/PLi-FullHD_Pars"
+		global XML_NAME, XML_FILE
+		XML_NAME = "PLi-FullHD_Pars.xml"
 		if cfg.skin.value == "PLi-HD1":
-			XML_NAME = "/etc/enigma2/PLi-HD1_Pars"
+			XML_NAME = "PLi-HD1_Pars.xml"
+		XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
 
 	def testFile(self):
 		try:
-			fi = open("%s.xml" % XML_NAME, "r")
+			fi = open(XML_FILE, "r")
 		except:
 			return False
 		else:
@@ -148,7 +150,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return "#" + value
 
 		tree = ET.ElementTree()
-		tree.parse("%s.xml" % XML_NAME)
+		tree.parse(XML_FILE)
 		colors = tree.find('colors')
 		for color in colors:
 			name = color.attrib.get('name', None)
@@ -179,11 +181,11 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				font.set('filename', cfg.font.value)
 				print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
 
-		fo = open("%s.xml" % XML_NAME, "w")
+		fo = open(XML_FILE, "w")
 		tree.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
 
 	def parseFont(self):
-		root = ET.parse("%s.xml" % XML_NAME).getroot()
+		root = ET.parse(XML_FILE).getroot()
 		fonts = root.find('fonts')
 		for font in fonts:
 			name = font.attrib.get('name', None)
@@ -194,7 +196,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return "nmsbd.ttf"
 
 	def parseColors(self):
-		root = ET.parse("%s.xml" % XML_NAME).getroot()
+		root = ET.parse(XML_FILE).getroot()
 		colors = root.find('colors')
 		for color in colors:
 			name = color.attrib.get('name', None)
@@ -279,9 +281,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def isParseable(self):
 		try:
-			root = ET.parse("%s.xml" % XML_NAME).getroot()
+			root = ET.parse(XML_FILE).getroot()
 		except:
-			print "[ModifyPLiFullHD] ERROR - file %s.xml corrupted ?" % XML_NAME
+			print "[ModifyPLiFullHD] ERROR - file %s corrupted ?" % XML_FILE
 			self.wrong_xml = True
 			return False
 		else:
@@ -311,12 +313,11 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		reload_skin_on_start = False
 
 	def reloadSkin(self):
-		filename = resolveFilename(SCOPE_CONFIG, "%s.xml" % XML_NAME.replace("/etc/enigma2/",""))
-		path = os.path.dirname(filename) + "/"
-		print "path:", path, "filename:", filename
+		path = os.path.dirname(XML_FILE) + "/"
+		print "[ModifyPLiFullHD] parsing %s" % XML_FILE
 
 		# remove disabled items in plugin's setup from xml before reloading skin
-		root = ET.parse(filename).getroot()
+		root = ET.parse(XML_FILE).getroot()
 		windowstyle = root.find('windowstyle')
 		for borderset in windowstyle.findall("borderset"):
 			for pixmap in borderset.findall("pixmap"):
@@ -415,7 +416,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		indent(root)
 		et = ET.ElementTree(root)
-		fo = open("%s.xml" % XML_NAME, "w")
+		fo = open(XML_FILE, "w")
 		et.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
 		self.wrong_xml = False
 
@@ -435,13 +436,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		elif selected == 1:
 			self.saveParametersToFile()
 		elif selected == 2:
-			self.deleteParseFile("%s.xml" % XML_NAME)
+			self.deleteParseFile(XML_FILE)
 			self.close()
 		else:
 			return
 		self.selection = selected
 
-# not used, for future:
+# not used, may be for future:
 	def colorDict(self):
 		# 2 lines to init
 		self.newColors = {}
