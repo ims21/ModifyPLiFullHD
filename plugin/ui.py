@@ -13,6 +13,7 @@ from plugin import VERSION
 import os
 import skin
 import enigma
+import shutil
 from Tools.Directories import resolveFilename, SCOPE_CONFIG
 import xml.etree.cElementTree as ET
 
@@ -39,6 +40,7 @@ cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("
 
 XML_NAME = "PLi-FullHD_Pars.xml"
 XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
+BACKUP = "/tmp/skintmp.xml"
 
 reload_skin_on_start = True
 
@@ -58,7 +60,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 		self.session = session
 		self.menuSelectedIndex = selected
-		self.show_apply = show_apply
+		self.withApply = show_apply
 
 		self.list = []
 		self.onChangedEntry = []
@@ -99,8 +101,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self.setSkinPath()
 
-		if self.testFile():
+		if self.testFile(XML_FILE):
 			if self.isParseable():
+				if not self.withApply:
+					self.backupParseFile(XML_FILE)
 				cfg.font.value = self.parseFont()
 				self.parseColors()
 			else:
@@ -108,6 +112,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		else:
 			self["info"].setText(_("Was created new config file, restart for apply."))
 			self.createDefaultCfgFile()
+			if not self.withApply:
+				self.backupParseFile(XML_FILE)
 
 		self.skin_enabled = _("Use modify skin")
 		self.skin_name = _("Skin")
@@ -132,7 +138,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self["config"].setCurrentIndex(self.menuSelectedIndex)
 
 	def showButtons(self):
-		if self.show_apply:
+		if self.withApply:
 			self["key_yellow"].show()
 		else:
 			self["key_yellow"].hide()
@@ -149,9 +155,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			XML_NAME = "PLi-HD1_Pars.xml"
 		XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
 
-	def testFile(self):
+	def testFile(self, name):
 		try:
-			fi = open(XML_FILE, "r")
+			fi = open(name, "r")
 		except:
 			return False
 		else:
@@ -162,7 +168,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable = self.getColorsFromCfg()
 
 		def addMark(value):
-			return "#" + value
+			return ''.join(("#", value))
 
 		tree = ET.ElementTree()
 		tree.parse(XML_FILE)
@@ -194,7 +200,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			name = font.attrib.get('name', None)
 			if name == "Regular":
 				font.set('filename', cfg.font.value)
-				print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
+				#print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
 
 		fo = open(XML_FILE, "w")
 		tree.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
@@ -288,11 +294,25 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def cancelCallback(self, answer):
 		if answer:
 			for x in self["config"].list:
-				x[1].cancel()
-			self.close()
+				x[1].cancel
+			self.useBackupFile()
+			self.applyChanges(recurse=False)
 
 	def deleteParseFile(self, name):
-		os.unlink(name)
+		if self.testFile(name):
+			os.unlink(name)
+	def backupParseFile(self, name):
+		if self.testFile(BACKUP):
+			if  not self.withApply:
+				os.unlink(BACKUP)
+				shutil.copyfile(name, BACKUP)
+				return True
+			return False
+		shutil.copyfile(name, BACKUP)
+		return True
+	def useBackupFile(self):
+		if self.testFile(BACKUP):
+			shutil.move(BACKUP, XML_FILE)
 
 	def isParseable(self):
 		try:
@@ -305,13 +325,17 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.wrong_xml = False
 			return True
 
-	def applyChanges(self):
-		self.saveConfig()
-		self.setSkinPath()
-		self.saveParametersToFile()
+	def applyChanges(self, recurse=True):
+		if recurse:
+			self.setSkinPath()
+			self.saveParametersToFile()
 		self.reloadSkin()
 		self.reloadChanellSelection()
-		self.close(True, self["config"].getCurrentIndex())
+		if recurse:
+			self.close((self["config"].getCurrentIndex(),True))
+		else:
+			self.deleteParseFile(BACKUP)
+			self.close()
 
 	def reloadChanellSelection(self):
 		import Screens.InfoBar
@@ -322,7 +346,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def applyAutorun(self):
 		self.disableAutorun()
 		self.setSkinPath()
-		if self.testFile():
+		if self.testFile(XML_FILE):
 			if self.isParseable():
 				self.reloadSkin()
 		else:
@@ -455,7 +479,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		selected = int(choice[1])
 		if selected == 0:
 			self.createDefaultCfgFile()
-			self.close(True, self["config"].getCurrentIndex(), True)
+			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 1:
 			self.saveParametersToFile()
 		elif selected == 2:
