@@ -54,12 +54,15 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		<widget name="info" position="5,262" size="600,25" font="Regular;20" halign="center" transparent="1"/>
 	</screen>"""
 
-	def __init__(self, session):
+	def __init__(self, session, selected = None, show_apply = False):
 		Screen.__init__(self, session)
+		self.session = session
+		self.menuSelectedIndex = selected
+		self.show_apply = show_apply
 
 		self.list = []
 		self.onChangedEntry = []
-		self.session = session
+
 		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry )
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -67,27 +70,30 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				"cancel": self.keyCancel,
 				"red": self.keyCancel,
 				"green": self.keySave,
-				"yellow": self.applyFont,
+				"yellow": self.applyChanges,
 				"blue": self.showFileOptions,
 			}, -2)
-		self.selection = 0
 
 		self["key_green"] = Label(_("Ok"))
 		self["key_red"] = Label(_("Cancel"))
-		self["key_yellow"] = Label(_("Now"))
+		self["key_yellow"] = Label(_("Apply"))
 		self["key_blue"] = Label(_("Options"))
 		self["info"]= Label()
 
 		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" - v.%s") % VERSION
-		self.wrong_xml = False
-
 		self.setTitle(self.title)
-		self.current_skin = config.skin.primary_skin.value.split('/')[0]
 
+		self.wrong_xml = False
+		self.selectionChoiceBox = 0
+
+		self.current_skin = config.skin.primary_skin.value.split('/')[0]
 		cfg.skin.value = self.current_skin
+
 		self.onLayoutFinish.append(self.loadMenu)
 
 	def loadMenu(self):
+		self.showButtons()
+
 		self.list = []
 		self["info"].setText("")
 
@@ -122,8 +128,17 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
 
 		self["config"].list = self.list
+		if self.menuSelectedIndex:
+			self["config"].setCurrentIndex(self.menuSelectedIndex)
+
+	def showButtons(self):
+		if self.show_apply:
+			self["key_yellow"].show()
+		else:
+			self["key_yellow"].hide()
 
 	def changedEntry(self):
+		self["key_yellow"].show()
 		if self["config"].getCurrent()[0] in (self.skin_name, self.skin_enabled):
 			self.loadMenu()
 
@@ -248,7 +263,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.saveParametersToFile()
 		if self["config"].isChanged() and self.current_skin == cfg.skin.value:
 			self.saveConfig()
-			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("GUI needs a restart to apply a new skin\nDo you want to restart the GUI now?"))
+			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("Changes for selector in channel list will apply after restart GUI only.\nDo you want to restart the GUI now?"))
 			restartbox.setTitle(self.title)
 		else:
 			self.saveConfig()
@@ -290,13 +305,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.wrong_xml = False
 			return True
 
-	def applyFont(self):
+	def applyChanges(self):
 		self.saveConfig()
 		self.setSkinPath()
 		self.saveParametersToFile()
 		self.reloadSkin()
 		self.reloadChanellSelection()
-		self.close()
+		self.close(True, self["config"].getCurrentIndex())
 
 	def reloadChanellSelection(self):
 		import Screens.InfoBar
@@ -432,7 +447,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		menu.append((_("Create new file with default values") ,0))
 		menu.append((_("Save current parameters"),1))
 		menu.append((_("Delete file with parameters and close plugin"),2))
-		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selection)
+		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
 		if choice is None:
@@ -440,6 +455,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		selected = int(choice[1])
 		if selected == 0:
 			self.createDefaultCfgFile()
+			self.close(True, self["config"].getCurrentIndex(), True)
 		elif selected == 1:
 			self.saveParametersToFile()
 		elif selected == 2:
@@ -447,7 +463,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close()
 		else:
 			return
-		self.selection = selected
+		self.selectionChoiceBox = selected
 
 # not used, may be for future:
 	def colorDict(self):

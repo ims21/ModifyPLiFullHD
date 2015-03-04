@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Modify PLi-FullHD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-02 23:20+0100\n"
-"PO-Revision-Date: 2015-03-02 23:25+0100\n"
+"POT-Creation-Date: 2015-03-04 12:22+0100\n"
+"PO-Revision-Date: 2015-03-04 12:25+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: \n"
@@ -43,8 +43,8 @@ msgstr ""
 msgid "Cancel"
 msgstr "Zavřít"
 
-msgid "Font"
-msgstr ""
+msgid "Apply"
+msgstr "Aplikovat"
 
 msgid "Options"
 msgstr "Možnosti"
@@ -57,8 +57,8 @@ msgid " - v.%s"
 msgstr ""
 
 #, python-format
-msgid "!!! Invalid format: %s.xml, not used !!!"
-msgstr "!!! Neplatný formát: %s.xml. Nepoužito !!!"
+msgid "!!! Invalid format: %s, not used !!!"
+msgstr "!!! Neplatný formát: %s. Nepoužito !!!"
 
 msgid "Was created new config file, restart for apply."
 msgstr "Založen nový konfigurační soubor. Restartujte GUI."
@@ -83,7 +83,7 @@ msgid "Bottom color  (a,r,g,b)"
 msgstr ""
 
 msgid "Vertical selector's lines"
-msgstr "Vertikální linky selectoru"
+msgstr "Vertikální linky selektoru"
 
 msgid "SelectedFG color  (a,r,g,b)"
 msgstr ""
@@ -108,10 +108,10 @@ msgstr ""
 
 #
 msgid ""
-"GUI needs a restart to apply a new skin\n"
+"Changes for selector in channel list will apply after restart GUI only.\n"
 "Do you want to restart the GUI now?"
 msgstr ""
-"Pro uplatnění změn ve skinu je potřeba restartovat GUI\n"
+"Změny pro selektor v seznamu kanálů se projeví až po restartu GUI.\n"
 "Chcete nyní restartovat GUI?"
 
 #

@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.18a"
+VERSION = "1.19a"
 #    Coded by ims (c)2015
 #
 #    This program is free software; you can redistribute it and/or
@@ -32,7 +32,10 @@ def autostart(reason, **kwargs):
 
 def main(session,**kwargs):
 	import ui
-	session.open(ui.ModifyPLiFullHD)
+	def recurse(answer=False, selected = None, show_apply = False):
+		if answer:
+			session.openWithCallback(recurse,ui.ModifyPLiFullHD, selected, show_apply)
+	session.openWithCallback(recurse,ui.ModifyPLiFullHD)
 
 def Plugins(path, **kwargs):
 	name = _("Modify PLi-FullHD")

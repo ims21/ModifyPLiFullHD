@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-02 23:20+0100\n"
+"POT-Creation-Date: 2015-03-04 12:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-msgid "Font"
+msgid "Apply"
 msgstr ""
 
 msgid "Options"
@@ -55,7 +55,7 @@ msgid " - v.%s"
 msgstr ""
 
 #, python-format
-msgid "!!! Invalid format: %s.xml, not used !!!"
+msgid "!!! Invalid format: %s, not used !!!"
 msgstr ""
 
 msgid "Was created new config file, restart for apply."
@@ -104,7 +104,7 @@ msgid "Notavailable color  (a,r,g,b)"
 msgstr ""
 
 msgid ""
-"GUI needs a restart to apply a new skin\n"
+"Changes for selector in channel list will apply after restart GUI only.\n"
 "Do you want to restart the GUI now?"
 msgstr ""
 
