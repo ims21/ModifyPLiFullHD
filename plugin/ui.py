@@ -74,7 +74,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self["key_green"] = Label(_("Ok"))
 		self["key_red"] = Label(_("Cancel"))
-		self["key_yellow"] = Label(_("Font"))
+		self["key_yellow"] = Label(_("Now"))
 		self["key_blue"] = Label(_("Options"))
 		self["info"]= Label()
 
@@ -295,7 +295,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.setSkinPath()
 		self.saveParametersToFile()
 		self.reloadSkin()
+		self.reloadChanellSelection()
 		self.close()
+
+	def reloadChanellSelection(self):
+		import Screens.InfoBar
+		screen = Screens.InfoBar.InfoBar.instance.servicelist
+		screen.applySkin()
+		screen.setMode()
 
 	def applyAutorun(self):
 		self.disableAutorun()
