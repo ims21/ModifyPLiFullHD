@@ -269,7 +269,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.saveParametersToFile()
 		if self["config"].isChanged() and self.current_skin == cfg.skin.value:
 			self.saveConfig()
-			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("Changes for selector in channel list will apply after restart GUI only.\nDo you want to restart the GUI now?"))
+			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("Some screens could be in old colors still.\nDo you want to restart the GUI now?"))
 			restartbox.setTitle(self.title)
 		else:
 			self.saveConfig()
@@ -338,10 +338,44 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close()
 
 	def reloadChanellSelection(self):
-		import Screens.InfoBar
-		screen = Screens.InfoBar.InfoBar.instance.servicelist
-		screen.applySkin()
-		screen.setMode()
+		import Screens
+
+#		ChannelSelection = Screens.InfoBar.InfoBar.instance.servicelist
+#		ChannelSelection.applySkin()
+#		ChannelSelection.setMode()
+
+		old = Screens.InfoBar.InfoBar.instance.servicelist
+		history_pos = old.history_pos
+		servicePathTV = old.servicePathTV
+		servicePathRadio = old.servicePathRadio
+		servicePath = old.servicePath
+		history = old.history
+		rootChanged = old.rootChanged
+		startRoot = old.startRoot
+		selectionNumber = old.selectionNumber
+		mode = old.mode
+		dopipzap = old.dopipzap
+		pathChangeDisabled = old.pathChangeDisabled
+		movemode = old.movemode
+		showSatDetails = old.showSatDetails
+
+		Screens.InfoBar.InfoBar.instance.servicelist = self.session.instantiateDialog(Screens.ChannelSelection.ChannelSelection)
+
+		new = Screens.InfoBar.InfoBar.instance.servicelist
+		new.servicePathTV = servicePathTV
+		new.servicePathRadio = servicePathRadio
+		new.servicePath = servicePath
+		new.history = history
+		new.rootChanged = rootChanged
+		new.startRoot = startRoot
+		new.selectionNumber = selectionNumber
+		new.mode = mode
+		new.dopipzap = dopipzap
+		new.pathChangeDisabled = pathChangeDisabled
+		new.movemode = movemode
+		new.showSatDetails = showSatDetails
+		new.history_pos = history_pos
+		new.recallBouquetMode()
 
 	def applyAutorun(self):
 		self.disableAutorun()
