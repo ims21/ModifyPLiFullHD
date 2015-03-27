@@ -429,7 +429,26 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def line(self, name):
 		return "%s/border/%s.png" % (cfg.skin.value, name)
 
-	def createDefaultCfgFile(self):
+	def createDefaultCfgFile(self, typ=""):
+		toptemplatecolor = "#00000030"
+		basictemplatecolor = "#00000020"
+		selectorcolor = "#00000030"
+		transponderinfo = "#000090f0"
+
+		if typ == "hah":
+			toptemplatecolor = "#00003030"
+			basictemplatecolor = "#00002020"
+			selectorcolor = "#00003030"
+			transponderinfo = "#00b0b080"
+		if typ == "purple":
+			toptemplatecolor = "#00200020"
+			basictemplatecolor = "#00180018"
+			selectorcolor = "#00200020"
+		if typ == "grey":
+			toptemplatecolor = "#001c1c1c"
+			basictemplatecolor = "#00181818"
+			selectorcolor = "#001c1c1c"
+			transponderinfo = "#00b0b080"
 
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
@@ -452,10 +471,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( fonts, 'font', filename="LiberationSans-Regular.ttf", name="Regular", scale="100")
 
 		colors = ET.SubElement(root, 'colors')
-		ET.SubElement( colors, 'color', name="toptemplatecolor", value="#00000030")
-		ET.SubElement( colors, 'color', name="basictemplatecolor", value="#00000020")
-		ET.SubElement( colors, 'color', name="selectorcolor", value="#00000030")
-		ET.SubElement( colors, 'color', name="transponderinfo", value="#000090f0")
+		ET.SubElement( colors, 'color', name="toptemplatecolor", value="%s" % toptemplatecolor)
+		ET.SubElement( colors, 'color', name="basictemplatecolor", value="%s" % basictemplatecolor)
+		ET.SubElement( colors, 'color', name="selectorcolor", value="%s" % selectorcolor)
+		ET.SubElement( colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
 		ET.SubElement( colors, 'color', name="selectedFG", value="#00fcc000")
 		ET.SubElement( colors, 'color', name="yellow", value="#00ffc000")
 		ET.SubElement( colors, 'color', name="red", value="#00fa4010")
@@ -502,9 +521,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def showFileOptions(self):
 		menu = []
-		menu.append((_("Create new file with default values") ,0))
-		menu.append((_("Save current parameters"),1))
-		menu.append((_("Delete file with parameters and close plugin"),2))
+		menu.append((_("Create new file with default values") , 0))
+		menu.append((_("Save current parameters"), 1))
+		menu.append((_("Delete file with parameters and close plugin"), 2))
+		menu.append((_("Create new \"%s\" file") % "H&H" , 3))
+		menu.append((_("Create new \"%s\" file") % "Purple" , 4))
+		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -519,6 +541,15 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		elif selected == 2:
 			self.deleteParseFile(XML_FILE)
 			self.close()
+		elif selected == 3:
+			self.createDefaultCfgFile("hah")
+			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 4:
+			self.createDefaultCfgFile("purple")
+			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 5:
+			self.createDefaultCfgFile("grey")
+			self.close((self["config"].getCurrentIndex(), True))
 		else:
 			return
 		self.selectionChoiceBox = selected

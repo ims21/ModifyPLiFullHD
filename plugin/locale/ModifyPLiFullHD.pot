@@ -122,3 +122,6 @@ msgstr ""
 
 msgid "Operations with configuration file"
 msgstr ""
+
+msgid "Create new \"%s\" file"
+msgstr ""
