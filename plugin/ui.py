@@ -435,7 +435,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		selectorcolor = "#00000030"
 		transponderinfo = "#000090f0"
 
-		if typ == "hah":
+		if typ == "fah":
 			toptemplatecolor = "#00003030"
 			basictemplatecolor = "#00002020"
 			selectorcolor = "#00003030"
@@ -524,7 +524,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		menu.append((_("Create new file with default values") , 0))
 		menu.append((_("Save current parameters"), 1))
 		menu.append((_("Delete file with parameters and close plugin"), 2))
-		menu.append((_("Create new \"%s\" file") % "H&H" , 3))
+		menu.append((_("Create new \"%s\" file") % "F&H" , 3))
 		menu.append((_("Create new \"%s\" file") % "Purple" , 4))
 		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
@@ -542,7 +542,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.deleteParseFile(XML_FILE)
 			self.close()
 		elif selected == 3:
-			self.createDefaultCfgFile("hah")
+			self.createDefaultCfgFile("fah")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 4:
 			self.createDefaultCfgFile("purple")
