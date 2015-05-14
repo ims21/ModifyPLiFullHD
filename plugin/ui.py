@@ -37,10 +37,12 @@ cfg.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
 cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
 cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
+cfg.oopera_scale = ConfigSelection(default = "standard", choices = [("fullhd",_("FullHD")),("standard",_("Standard"))])
 
 XML_NAME = "PLi-FullHD_Pars.xml"
 XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
 BACKUP = "/tmp/skintmp.xml"
+OPERA_INI_PATH = "/usr/local/OpenOpera/home/opera.ini"
 
 reload_skin_on_start = True
 
@@ -91,6 +93,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
 		cfg.skin.value = self.current_skin
 
+		if self.get_opera_scale():
+			cfg.oopera_scale.value = self.get_opera_scale()
+
 		self.onLayoutFinish.append(self.loadMenu)
 
 	def loadMenu(self):
@@ -132,6 +137,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
 			self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
 			self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
+			if self.get_opera_scale():
+				self.list.append(getConfigListEntry(_("OpenOpera scale for skin"), cfg.oopera_scale))
 
 		self["config"].list = self.list
 		if self.menuSelectedIndex:
@@ -267,6 +274,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def keySave(self):
 		self.setSkinPath()
 		self.saveParametersToFile()
+		self.oopera_scale()
 		if self["config"].isChanged() and self.current_skin == cfg.skin.value:
 			self.saveConfig()
 			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("Some screens could be in old colors still.\nDo you want to restart the GUI now?"))
@@ -327,6 +335,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def applyChanges(self, recurse=True):
 		if recurse:
+			self.oopera_scale()
 			self.setSkinPath()
 			self.saveParametersToFile()
 		self.reloadSkin()
@@ -336,6 +345,27 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		else:
 			self.deleteParseFile(BACKUP)
 			self.close()
+
+	def oopera_scale(self):
+		status = self.get_opera_scale()
+		if status:
+			if "fullhd" in cfg.oopera_scale.value and status == "standard" :
+				os.system("sed -i 's/Scale=100/Scale=150/' %s" % OPERA_INI_PATH)
+			elif "standard" in cfg.oopera_scale.value and status == "fullhd":
+				os.system("sed -i 's/Scale=150/Scale=100/' %s" % OPERA_INI_PATH)
+
+	def get_opera_scale(self):
+		try:
+			fi = open(OPERA_INI_PATH ,"r")
+			for line in fi.readlines():
+				if "Scale" in line:
+					if line[-4:-1] == "100":
+						return "standard"
+					elif line[-4:-1] == "150":
+						return "fullhd"
+			return None
+		except:
+			return None
 
 	def reloadChanellSelection(self):
 		import Screens
