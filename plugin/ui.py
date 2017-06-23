@@ -34,6 +34,8 @@ cfg.selectedfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 cfg.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
 cfg.redcolor = NoSave(ConfigIP(default=[0,250,64,16]))
 cfg.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
+cfg.backgroundcolor = NoSave(ConfigIP(default=[0,0,0,0]))
+cfg.blackcolor = NoSave(ConfigIP(default=[0,0,0,0]))
 cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
 cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
 cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
@@ -137,6 +139,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
 			self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
 			self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
+			self.list.append(getConfigListEntry(_("Background color  (a,r,g,b)"), cfg.backgroundcolor))
+			self.list.append(getConfigListEntry(_("Black color  (a,r,g,b)"), cfg.blackcolor))
 			if self.get_opera_scale():
 				self.list.append(getConfigListEntry(_("OpenOpera scale for skin"), cfg.oopera_scale))
 
@@ -172,7 +176,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return True
 
 	def saveParametersToFile(self):
-		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable = self.getColorsFromCfg()
+		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
 
 		def addMark(value):
 			return ''.join(("#", value))
@@ -202,6 +206,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				color.set('value', addMark(fallback))
 			if name == "notavailable":
 				color.set('value', addMark(notavailable))
+			if name == "background":
+				color.set('value', addMark(background))
+			if name == "black":
+				color.set('value', addMark(black))
 		fonts = tree.find('fonts')
 		for font in fonts:
 			name = font.attrib.get('name', None)
@@ -250,6 +258,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.fallbackcolor.value = self.map(value)
 			if name == "notavailable":
 				cfg.notavailablecolor.value = self.map(value)
+			if name == "background":
+				cfg.backgroundcolor.value = self.map(value)
+			if name == "black":
+				cfg.blackcolor.value = self.map(value)
 
 	def map(self, colorstring):
 		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
@@ -265,8 +277,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		secondfg = self.l2h(cfg.secondfgcolor.value)
 		fallback = self.l2h(cfg.fallbackcolor.value)
 		notavailable = self.l2h(cfg.notavailablecolor.value)
+		background = self.l2h(cfg.backgroundcolor.value)
+		black = self.l2h(cfg.blackcolor.value)
 
-		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable
+		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable, background, black
 
 	def l2h(self, l):
 		return "%02x%02x%02x%02x" % (l[0],l[1],l[2],l[3])
@@ -511,6 +525,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="secondFG", value="#00fcc000")
 		ET.SubElement( colors, 'color', name="fallback", value="#00b0b0c0")
 		ET.SubElement( colors, 'color', name="notavailable", value="#005e5e5e")
+		ET.SubElement( colors, 'color', name="background", value="#00000000")
+		ET.SubElement( colors, 'color', name="black", value="#00000000")
 
 		windowstyle = ET.SubElement(root, 'windowstyle', id="0", type="skinned")
 		ET.SubElement( windowstyle, 'title', offset="20,10", font="Regular;20")
@@ -590,7 +606,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.newColors = {}
 		self.newColorsKeys = self.newColors.keys()
 
-		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, red, secondFG, fallback, notavailable = self.getColorsFromCfg()
+		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, red, secondFG, fallback, notavailable, background, black = self.getColorsFromCfg()
 		self.newColors = {
 			'toptemplatecolor': toptemplatecolor,
 			'basictemplatecolor': basictemplatecolor,
@@ -601,7 +617,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			'red': red,
 			'secondFG': secondFG,
 			'fallback': fallback,
-			'notavailable': notavailable
+			'notavailable': notavailable,
+			'background': background,
+			'black': black
 		}
 		self.newColorsKeys = self.newColors.keys()
 
