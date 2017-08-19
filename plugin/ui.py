@@ -631,7 +631,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.colorDict()
 		for n in skin.colorNames:
 			if n in self.newColors.keys():
-				skin.colorNames[n] = enigma.gRGB(int(self.newColors[n], 0x10))
+#				skin.colorNames[n] = enigma.gRGB(int(self.newColors[n], 0x10))
+				skin.colorNames[n] = skin.parseColor("#%s" % self.newColors[n])
 ###
 
 modifyskin = ModifyPLiFullHD(Screen)
