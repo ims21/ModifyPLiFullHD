@@ -488,15 +488,20 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			toptemplatecolor = "#00200020"
 			basictemplatecolor = "#00180018"
 			selectorcolor = "#00200020"
-		if typ == "grey":
+		if typ == "grey" or typ == "grey2":
 			toptemplatecolor = "#001c1c1c"
 			basictemplatecolor = "#00181818"
 			selectorcolor = "#001c1c1c"
-			transponderinfo = "#00a0a080"
-			selectedFG = "#00dcc050"
-			yellow = "#00dcc050"
-			secondFG = "#00dcc050"
-
+			if typ == "grey":
+				selectedFG = "#00dcc050"
+				yellow = "#00dcc050"
+				secondFG = "#00dcc050"
+				transponderinfo = "#00a0a080"
+			if typ == "grey2":
+				transponderinfo = "#00b0b0b0"
+				selectedFG = "#00f0b140"
+				yellow = "#00f0b140"
+				secondFG = "#00f0b140"
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
 			if len(elem):
@@ -576,6 +581,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		menu.append((_("Create new \"%s\" file") % "F&H" , 3))
 		menu.append((_("Create new \"%s\" file") % "Purple" , 4))
 		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
+		menu.append((_("Create new \"%s\" file") % "Grey 2" , 6))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -598,6 +604,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 5:
 			self.createDefaultCfgFile("grey")
+			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 6:
+			self.createDefaultCfgFile("grey2")
 			self.close((self["config"].getCurrentIndex(), True))
 		else:
 			return
