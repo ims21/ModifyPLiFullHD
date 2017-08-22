@@ -492,7 +492,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			toptemplatecolor = "#001c1c1c"
 			basictemplatecolor = "#00181818"
 			selectorcolor = "#001c1c1c"
-			transponderinfo = "#00b0b080"
+			transponderinfo = "#00a0a080"
+			selectedFG = "#00dcc050"
+			yellow = "#00dcc050"
+			secondFG = "#00dcc050"
 
 		def indent(elem, level=0):
 			i = "\n" + level*"  "

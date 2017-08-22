@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.24"
+VERSION = "1.25"
 #    Coded by ims (c)2015-2017
 #
 #    This program is free software; you can redistribute it and/or
