@@ -478,6 +478,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		basictemplatecolor = "#00000020"
 		selectorcolor = "#00000030"
 		transponderinfo = "#000090f0"
+		selectedFG = "#00fcc000"
+		yellow = "#00ffc000"
+		secondFG = "#00fcc000"
 
 		if typ == "fah":
 			toptemplatecolor = "#00003030"
@@ -493,15 +496,16 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			basictemplatecolor = "#00181818"
 			selectorcolor = "#001c1c1c"
 			if typ == "grey":
+				transponderinfo = "#00a0a080"
 				selectedFG = "#00dcc050"
 				yellow = "#00dcc050"
 				secondFG = "#00dcc050"
-				transponderinfo = "#00a0a080"
 			if typ == "grey2":
 				transponderinfo = "#00b0b0b0"
 				selectedFG = "#00f0b140"
 				yellow = "#00f0b140"
 				secondFG = "#00f0b140"
+
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
 			if len(elem):
@@ -527,10 +531,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="basictemplatecolor", value="%s" % basictemplatecolor)
 		ET.SubElement( colors, 'color', name="selectorcolor", value="%s" % selectorcolor)
 		ET.SubElement( colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
-		ET.SubElement( colors, 'color', name="selectedFG", value="#00fcc000")
-		ET.SubElement( colors, 'color', name="yellow", value="#00ffc000")
+		ET.SubElement( colors, 'color', name="selectedFG", value="%s" % selectedFG)
+		ET.SubElement( colors, 'color', name="yellow", value="%s" % yellow)
 		ET.SubElement( colors, 'color', name="red", value="#00fa4010")
-		ET.SubElement( colors, 'color', name="secondFG", value="#00fcc000")
+		ET.SubElement( colors, 'color', name="secondFG", value="%s" % secondFG)
 		ET.SubElement( colors, 'color', name="fallback", value="#00b0b0c0")
 		ET.SubElement( colors, 'color', name="notavailable", value="#005e5e5e")
 		ET.SubElement( colors, 'color', name="background", value="#00000000")
