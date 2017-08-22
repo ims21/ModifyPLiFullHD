@@ -481,6 +481,11 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		selectedFG = "#00fcc000"
 		yellow = "#00ffc000"
 		secondFG = "#00fcc000"
+		red = "#00fa4010"
+		fallback = "#00b0b0c0"
+		notavailable = "#005e5e5e"
+		background = "#00000000"
+		black = "#00000000"
 
 		if typ == "fah":
 			toptemplatecolor = "#00003030"
@@ -533,12 +538,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
 		ET.SubElement( colors, 'color', name="selectedFG", value="%s" % selectedFG)
 		ET.SubElement( colors, 'color', name="yellow", value="%s" % yellow)
-		ET.SubElement( colors, 'color', name="red", value="#00fa4010")
+		ET.SubElement( colors, 'color', name="red", value="%s" % red)
 		ET.SubElement( colors, 'color', name="secondFG", value="%s" % secondFG)
-		ET.SubElement( colors, 'color', name="fallback", value="#00b0b0c0")
-		ET.SubElement( colors, 'color', name="notavailable", value="#005e5e5e")
-		ET.SubElement( colors, 'color', name="background", value="#00000000")
-		ET.SubElement( colors, 'color', name="black", value="#00000000")
+		ET.SubElement( colors, 'color', name="fallback", value="%s" % fallback)
+		ET.SubElement( colors, 'color', name="notavailable", value="%s" % notavailable)
+		ET.SubElement( colors, 'color', name="background", value="%s" % background)
+		ET.SubElement( colors, 'color', name="black", value="%s" % black)
 
 		windowstyle = ET.SubElement(root, 'windowstyle', id="0", type="skinned")
 		ET.SubElement( windowstyle, 'title', offset="20,10", font="Regular;20")
