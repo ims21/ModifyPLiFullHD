@@ -474,13 +474,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return "%s/border/%s.png" % (cfg.skin.value, name)
 
 	def createDefaultCfgFile(self, typ=""):
-		toptemplatecolor = "#00000030"
-		basictemplatecolor = "#00000020"
-		selectorcolor = "#00000030"
-		transponderinfo = "#000090f0"
-		selectedFG = "#00fcc000"
-		yellow = "#00ffc000"
-		secondFG = "#00fcc000"
+		toptemplatecolor = "#00000014"
+		basictemplatecolor = "#00000010"
+		selectorcolor = "#00000020"
+		transponderinfo = "#00808080"
+		selectedFG = "#00c8aa40"
+		yellow = "#00c8aa40"
+		secondFG = "#00c8aa40"
 		red = "#00fa4010"
 		fallback = "#00b0b0c0"
 		notavailable = "#005e5e5e"
@@ -492,10 +492,17 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			basictemplatecolor = "#00002020"
 			selectorcolor = "#00003030"
 			transponderinfo = "#00b0b080"
+			selectedFG = "#00fcc000"
+			yellow = "#00ffc000"
+			secondFG = "#00fcc000"
 		if typ == "purple":
 			toptemplatecolor = "#00200020"
 			basictemplatecolor = "#00180018"
 			selectorcolor = "#00200020"
+			transponderinfo = "#00b0b080"
+			selectedFG = "#00fcc000"
+			yellow = "#00ffc000"
+			secondFG = "#00fcc000"
 		if typ == "grey" or typ == "grey2":
 			toptemplatecolor = "#001c1c1c"
 			basictemplatecolor = "#00181818"
@@ -510,6 +517,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				selectedFG = "#00f0b140"
 				yellow = "#00f0b140"
 				secondFG = "#00f0b140"
+		if typ == "blueold":
+			toptemplatecolor = "#00000030"
+			basictemplatecolor = "#00000020"
+			selectorcolor = "#00000030"
+			transponderinfo = "#000090f0"
+			selectedFG = "#00fcc000"
+			yellow = "#00ffc000"
+			secondFG = "#00fcc000"
 
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
@@ -591,6 +606,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		menu.append((_("Create new \"%s\" file") % "Purple" , 4))
 		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
 		menu.append((_("Create new \"%s\" file") % "Grey 2" , 6))
+		menu.append((_("Create new \"%s\" file") % "Blue old" , 7))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -616,6 +632,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 6:
 			self.createDefaultCfgFile("grey2")
+			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 7:
+			self.createDefaultCfgFile("blue_old")
 			self.close((self["config"].getCurrentIndex(), True))
 		else:
 			return
