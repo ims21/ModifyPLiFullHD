@@ -546,7 +546,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="black", value="%s" % black)
 
 		windowstyle = ET.SubElement(root, 'windowstyle', id="0", type="skinned")
-		ET.SubElement( windowstyle, 'title', offset="20,10", font="Regular;20")
+		ET.SubElement( windowstyle, 'title', offset="20,6", font="Regular;26")
 		ET.SubElement( windowstyle, 'color', name="Background", color="background")
 		ET.SubElement( windowstyle, 'color', name="LabelForeground", color="foreground")
 		ET.SubElement( windowstyle, 'color', name="ListboxBackground", color="background")
