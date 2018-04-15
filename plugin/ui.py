@@ -634,7 +634,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.createDefaultCfgFile("grey2")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 7:
-			self.createDefaultCfgFile("blue_old")
+			self.createDefaultCfgFile("blueold")
 			self.close((self["config"].getCurrentIndex(), True))
 		else:
 			return
