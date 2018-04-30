@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-08 18:21+0100\n"
+"POT-Creation-Date: 2018-05-01 00:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,12 @@ msgid "right only"
 msgstr ""
 
 msgid "none"
+msgstr ""
+
+msgid "FullHD"
+msgstr ""
+
+msgid "Standard"
 msgstr ""
 
 msgid "Ok"
@@ -103,6 +109,15 @@ msgstr ""
 msgid "Notavailable color  (a,r,g,b)"
 msgstr ""
 
+msgid "Background color  (a,r,g,b)"
+msgstr ""
+
+msgid "Black color  (a,r,g,b)"
+msgstr ""
+
+msgid "OpenOpera scale for skin"
+msgstr ""
+
 msgid ""
 "Some screens could be in old colors still.\n"
 "Do you want to restart the GUI now?"
@@ -120,8 +135,18 @@ msgstr ""
 msgid "Delete file with parameters and close plugin"
 msgstr ""
 
+#, python-format
+msgid "Create new \"%s\" file"
+msgstr ""
+
+msgid "Font sizes table"
+msgstr ""
+
 msgid "Operations with configuration file"
 msgstr ""
 
-msgid "Create new \"%s\" file"
+msgid "Font size / line height (px)"
+msgstr ""
+
+msgid "Modify PLi-FullHD font info"
 msgstr ""

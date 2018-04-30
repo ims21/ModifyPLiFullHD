@@ -9,6 +9,7 @@ from Components.Label import Label
 from Screens.Standby import TryQuitMainloop
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
+from Components.ScrollLabel import ScrollLabel
 from plugin import VERSION
 import os
 import skin
@@ -607,6 +608,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
 		menu.append((_("Create new \"%s\" file") % "Grey 2" , 6))
 		menu.append((_("Create new \"%s\" file") % "Blue old" , 7))
+		menu.append((_("Font sizes table") , 20))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -636,6 +638,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		elif selected == 7:
 			self.createDefaultCfgFile("blueold")
 			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 20:
+			self.session.open(ModifyPLiFullHDFontInfo)
 		else:
 			return
 		self.selectionChoiceBox = selected
@@ -676,3 +680,61 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 ###
 
 modifyskin = ModifyPLiFullHD(Screen)
+
+class ModifyPLiFullHDFontInfo(Screen):
+	skin = """
+	<screen name="ModifyPLiFullHDFontInfo" position="center,center" size="610,505" title="Modify PLi-FullHD - font info" backgroundColor="#31000000">
+		<widget name="fontname" position="5,5" size="100,22" font="Regular;19" halign="left" zPosition="2" transparent="1"/>
+		<widget name="info" position="165,5" size="440,22" font="Regular;19" halign="left" transparent="1"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,30" zPosition="2" size="600,2"/>
+		<widget name="fontsinfo" position="10,35" size="590,440" font="Regular;19" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,476" zPosition="2" size="600,2"/>
+		<widget name="key_red"   position="005,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		<widget name="key_green" position="155,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
+		<widget name="key_yellow" position="305,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
+		<widget name="key_blue"  position="455,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
+	</screen>"""
+
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		self.session = session
+
+		### do not remove self["tmp"] !!!
+		self["tmp"] = Label("")
+		###
+
+		self["info"] = Label(_("Font size / line height (px)"))
+		self["fontname"] = Label("")
+		self["fontsinfo"] = ScrollLabel()
+
+		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
+			{
+				"cancel": self.close,
+				"red": self.close,
+				"up": self["fontsinfo"].pageUp,
+				"down": self["fontsinfo"].pageDown
+			}, -2)
+
+		self["key_red"] = Label(_("Cancel"))
+		self.title = _("Modify PLi-FullHD font info")
+		self.setTitle(self.title)
+		self.onLayoutFinish.append(self.displayLabels)
+
+	def displayLabels(self):
+		self["tmp"].instance.setNoWrap(1)
+		self["tmp"].setText("W")
+		### font name (font.family) is used from skin label "fontname"
+		fnt = self["fontname"].instance.getFont()
+		###
+		self["fontname"].setText("%s" % fnt.family)
+		for h in range(1,21):
+			lh = self.lineHeight(h, fnt.family)
+			lh20 = self.lineHeight(h+20, fnt.family)
+			lh40 = self.lineHeight(h+40, fnt.family)
+			lh60 = self.lineHeight(h+60, fnt.family)
+			self["fontsinfo"].appendText("%d / %d\t%d / %d\t%d / %d\t%d / %d\n" % (h, lh, h+20, lh20, h+40, lh40, h+60, lh60))
+
+	def lineHeight(self, size, family):
+		fnt = enigma.gFont(family, size)
+		self["tmp"].instance.setFont(fnt)
+		return self["tmp"].instance.calculateSize().height()
