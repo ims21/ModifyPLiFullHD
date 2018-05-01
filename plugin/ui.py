@@ -681,60 +681,82 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 modifyskin = ModifyPLiFullHD(Screen)
 
-class ModifyPLiFullHDFontInfo(Screen):
+class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 	skin = """
-	<screen name="ModifyPLiFullHDFontInfo" position="center,center" size="610,505" title="Modify PLi-FullHD - font info" backgroundColor="#31000000">
-		<widget name="fontname" position="5,5" size="100,22" font="Regular;19" halign="left" zPosition="2" transparent="1"/>
-		<widget name="info" position="165,5" size="440,22" font="Regular;19" halign="left" transparent="1"/>
-		<ePixmap pixmap="skin_default/div-h.png" position="5,30" zPosition="2" size="600,2"/>
-		<widget name="fontsinfo" position="10,35" size="590,440" font="Regular;19" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
-		<ePixmap pixmap="skin_default/div-h.png" position="5,476" zPosition="2" size="600,2"/>
-		<widget name="key_red"   position="005,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
-		<widget name="key_green" position="155,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
-		<widget name="key_yellow" position="305,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
-		<widget name="key_blue"  position="455,480" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
+	<screen name="ModifyPLiFullHDFontInfo" position="center,center" size="610,520" title="Modify PLi-FullHD - font info" backgroundColor="#31000000">
+		<widget name="config" position="5,2" size="600,25"/>
+		<widget name="info" position="20,29" size="600,18" font="Regular;16" halign="left" transparent="1"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,48" zPosition="2" size="600,2"/>
+		<widget name="fontsinfo" position="20,53" size="590,440" font="Regular;19" zPosition="1" backgroundColor="#31000000" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,493" zPosition="2" size="600,2"/>
+		<widget name="key_red"   position="005,495" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="red" transparent="1"/>
+		<widget name="key_green" position="155,495" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="green" transparent="1"/>
+		<widget name="key_yellow" position="305,495" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="yellow" transparent="1"/>
+		<widget name="key_blue"  position="455,495" zPosition="2" size="150,25" valign="center" halign="center" font="Regular;22" foregroundColor="blue" transparent="1"/>
 	</screen>"""
 
-	def __init__(self, session):
+	def __init__(self, session, ):
 		Screen.__init__(self, session)
 		self.session = session
+		self.title = _("Modify PLi-FullHD font info")
 
 		### do not remove self["tmp"] !!!
 		self["tmp"] = Label("")
 		###
 
+		config.plugins.ModifyPLiFullHD = ConfigSubsection()
+		choicelist = self.readFonts()
+		config.plugins.ModifyPLiFullHD.fonts = NoSave(ConfigSelection(default = choicelist[0], choices = choicelist))
+
 		self["info"] = Label(_("Font size / line height (px)"))
-		self["fontname"] = Label("")
-		self["fontsinfo"] = ScrollLabel()
+		self["fontsinfo"] = Label()
+
+		self.FontInfoCfg = [getConfigListEntry(_("Select font"), config.plugins.ModifyPLiFullHD.fonts )]
+
+		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.changedEntry)
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
 			{
 				"cancel": self.close,
 				"red": self.close,
-				"up": self["fontsinfo"].pageUp,
-				"down": self["fontsinfo"].pageDown
 			}, -2)
 
 		self["key_red"] = Label(_("Cancel"))
-		self.title = _("Modify PLi-FullHD font info")
-		self.setTitle(self.title)
-		self.onLayoutFinish.append(self.displayLabels)
+		self.onLayoutFinish.append(self.changedEntry)
 
-	def displayLabels(self):
+	def changedEntry(self):
+		self.displayLabels(config.plugins.ModifyPLiFullHD.fonts.value.split(',')[0])
+
+	def displayLabels(self, family):
 		self["tmp"].instance.setNoWrap(1)
 		self["tmp"].setText("W")
-		### font name (font.family) is used from skin label "fontname"
-		fnt = self["fontname"].instance.getFont()
-		###
-		self["fontname"].setText("%s" % fnt.family)
+		info = ""
 		for h in range(1,21):
-			lh = self.lineHeight(h, fnt.family)
-			lh20 = self.lineHeight(h+20, fnt.family)
-			lh40 = self.lineHeight(h+40, fnt.family)
-			lh60 = self.lineHeight(h+60, fnt.family)
-			self["fontsinfo"].appendText("%d / %d\t%d / %d\t%d / %d\t%d / %d\n" % (h, lh, h+20, lh20, h+40, lh40, h+60, lh60))
+			lh = self.lineHeight(h, family)
+			lh20 = self.lineHeight(h+20, family)
+			lh40 = self.lineHeight(h+40, family)
+			lh60 = self.lineHeight(h+60, family)
+			info += ("%d / %d\t%d / %d\t%d / %d\t%d / %d\n" % (h, lh, h+20, lh20, h+40, lh40, h+60, lh60))
+		self["fontsinfo"].setText(info)
 
 	def lineHeight(self, size, family):
 		fnt = enigma.gFont(family, size)
 		self["tmp"].instance.setFont(fnt)
 		return self["tmp"].instance.calculateSize().height()
+
+	def readFonts(self):
+		from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
+		import xml.etree.cElementTree as ET
+		from Components.ScrollLabel import ScrollLabel
+
+		path = config.skin.primary_skin.value.split('/')[0]
+		if path is ".":
+			skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default.xml")
+		else:
+			skin = resolveFilename(SCOPE_CURRENT_SKIN, config.skin.primary_skin.value)
+		root = ET.parse(skin).getroot()
+		fonts = root.find('fonts')
+		list = []
+		for font in fonts.findall('font'):
+			list.append(("%s, %s") % (font.attrib.get('name', None), font.attrib.get('filename', None)))
+		return list
