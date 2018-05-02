@@ -681,6 +681,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 modifyskin = ModifyPLiFullHD(Screen)
 
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
+import xml.etree.cElementTree as ET
 class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 	skin = """
 	<screen name="ModifyPLiFullHDFontInfo" position="center,center" size="610,520" title="Modify PLi-FullHD - font info" backgroundColor="#31000000">
@@ -713,7 +715,7 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 
 		self.FontInfoCfg = [getConfigListEntry(_("Select font"), config.plugins.ModifyPLiFullHD.fonts )]
 
-		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.displayValues)
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
 			{
@@ -722,21 +724,19 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 			}, -2)
 
 		self["key_red"] = Label(_("Cancel"))
-		self.onLayoutFinish.append(self.changedEntry)
+		self.onLayoutFinish.append(self.displayValues)
 
-	def changedEntry(self):
-		self.displayLabels(config.plugins.ModifyPLiFullHD.fonts.value.split(',')[0])
-
-	def displayLabels(self, family):
+	def displayValues(self):
+		family = config.plugins.ModifyPLiFullHD.fonts.value.split(',')[0]
 		self["tmp"].instance.setNoWrap(1)
 		self["tmp"].setText("W")
 		info = ""
 		for h in range(1,21):
-			lh = self.lineHeight(h, family)
-			lh20 = self.lineHeight(h+20, family)
-			lh40 = self.lineHeight(h+40, family)
-			lh60 = self.lineHeight(h+60, family)
-			info += ("%d / %d\t%d / %d\t%d / %d\t%d / %d\n" % (h, lh, h+20, lh20, h+40, lh40, h+60, lh60))
+			info += ("%02d / %02d\t") % ( h, self.lineHeight(h, family))
+			info += ("%02d / %02d\t") % ( h+20, self.lineHeight(h+20, family))
+			info += ("%02d / %02d\t") % ( h+40, self.lineHeight(h+40, family))
+			info += ("%02d / %02d") % ( h+60, self.lineHeight(h+60, family))
+			info += ("\n")
 		self["fontsinfo"].setText(info)
 
 	def lineHeight(self, size, family):
@@ -745,10 +745,6 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		return self["tmp"].instance.calculateSize().height()
 
 	def readFonts(self):
-		from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
-		import xml.etree.cElementTree as ET
-		from Components.ScrollLabel import ScrollLabel
-
 		path = config.skin.primary_skin.value.split('/')[0]
 		if path is ".":
 			skin = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default.xml")
