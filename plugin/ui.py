@@ -483,7 +483,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		yellow = "#00c8aa40"
 		secondFG = "#00c8aa40"
 		red = "#00fa4010"
-		fallback = "#00b0b0c0"
+		fallback = "#00a8a8c0"
 		notavailable = "#005e5e5e"
 		background = "#00000000"
 		black = "#00000000"
