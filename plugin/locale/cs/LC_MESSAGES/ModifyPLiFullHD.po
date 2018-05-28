@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Modify PLi-FullHD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-01 17:39+0200\n"
-"PO-Revision-Date: 2018-05-01 17:40+0200\n"
+"POT-Creation-Date: 2018-05-28 19:39+0200\n"
+"PO-Revision-Date: 2018-05-28 19:49+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -39,7 +39,7 @@ msgid "FullHD"
 msgstr ""
 
 msgid "Standard"
-msgstr ""
+msgstr "Standardní"
 
 msgid "Ok"
 msgstr ""
@@ -60,6 +60,9 @@ msgstr "Modify PLi-FullHD - nastavení fontu a barev"
 #, python-format
 msgid " - v.%s"
 msgstr ""
+
+msgid "Plugin can be run under skins 'PLi-FullHD' or 'PLiHD1' only!"
+msgstr "Plugin může být spuštěn pouze pod skinem 'PLi-FullHD' nebo 'PLiHD1'."
 
 #, python-format
 msgid "!!! Invalid format: %s, not used !!!"

@@ -1,5 +1,23 @@
 # for localized messages
 from . import _
+#################################################################################
+#
+#    Plugin for Enigma2
+#    version:
+VERSION = "1.30"
+#    Coded by ims (c)2015-2018
+#
+#    This program is free software; you can redistribute it and/or
+#    modify it under the terms of the GNU General Public License
+#    as published by the Free Software Foundation; either version 2
+#    of the License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#################################################################################
 
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
@@ -10,7 +28,7 @@ from Screens.Standby import TryQuitMainloop
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 from Components.ScrollLabel import ScrollLabel
-from plugin import VERSION
+
 import os
 import skin
 import enigma
@@ -49,6 +67,12 @@ OPERA_INI_PATH = "/usr/local/OpenOpera/home/opera.ini"
 
 reload_skin_on_start = True
 
+def hex2strColor(argb):
+	out = ""
+	for i in range(28,-1,-4):
+		out += "%s" % chr(0x30 + (argb>>i & 0xf))
+	return out
+
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
 	<screen name="ModifyPLiFullHD" position="center,center" size="610,323" title="Modify PLi-FullHD - setup font and colors" backgroundColor="#31000000">
@@ -66,7 +90,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.session = session
 		self.menuSelectedIndex = selected
 		self.withApply = show_apply
-
 		self.list = []
 		self.onChangedEntry = []
 
@@ -99,14 +122,24 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		if self.get_opera_scale():
 			cfg.oopera_scale.value = self.get_opera_scale()
 
-		self.onLayoutFinish.append(self.loadMenu)
+		self.onShown.append(self.testSkin)
+
+	def testSkin(self):
+		def testSkinCallback(choice):
+			self.close()
+		if self.current_skin in ("PLi-FullHD", "PLiHD1"):
+			self.loadMenu()
+		else:
+			self.session.openWithCallback(	testSkinCallback,
+							MessageBox,
+							_("Plugin can be run under skins 'PLi-FullHD' or 'PLiHD1' only!"),
+							type=MessageBox.TYPE_INFO, timeout=4)
+			self.close()
 
 	def loadMenu(self):
 		self.showButtons()
 
-		self.list = []
 		self["info"].setText("")
-
 		self.setSkinPath()
 
 		if self.testFile(XML_FILE):
@@ -125,21 +158,33 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		self.skin_enabled = _("Use modify skin")
 		self.skin_name = _("Skin")
+		self.loadConfig()
+
+	def loadConfig(self):
+		self.list = []
 		self.list.append(getConfigListEntry(self.skin_enabled ,cfg.enabled))
 		if cfg.enabled.value:
+			e = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 			self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
 			self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
 			self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
 			self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
 			self.list.append(getConfigListEntry(_("Bottom color  (a,r,g,b)"), cfg.basictemplatecolor))
 			self.list.append(getConfigListEntry(_("Vertical selector's lines"), cfg.selector_vertical))
-			self.list.append(getConfigListEntry(_("SelectedFG color  (a,r,g,b)"), cfg.selectedfgcolor))
-			self.list.append(getConfigListEntry(_("SecondFG color  (a,r,g,b)"), cfg.secondfgcolor))
-			self.list.append(getConfigListEntry(_("Yellow color  (a,r,g,b)"), cfg.yellowcolor))
-			self.list.append(getConfigListEntry(_("TransponderInfo color  (a,r,g,b)"), cfg.transponderinfocolor))
-			self.list.append(getConfigListEntry(_("Red color  (a,r,g,b)"), cfg.redcolor))
-			self.list.append(getConfigListEntry(_("Fallback color  (a,r,g,b)"), cfg.fallbackcolor))
-			self.list.append(getConfigListEntry(_("Notavailable color  (a,r,g,b)"), cfg.notavailablecolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
+			self.list.append(getConfigListEntry(b + _("SelectedFG color  (a,r,g,b)") + e, cfg.selectedfgcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("secondFG").argb()))
+			self.list.append(getConfigListEntry(b + _("SecondFG color  (a,r,g,b)") + e, cfg.secondfgcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
+			self.list.append(getConfigListEntry(b + _("Yellow color  (a,r,g,b)") + e, cfg.yellowcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("transponderinfo").argb()))
+			self.list.append(getConfigListEntry(b + _("TransponderInfo color  (a,r,g,b)") + e, cfg.transponderinfocolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("red").argb()))
+			self.list.append(getConfigListEntry(b + _("Red color  (a,r,g,b)") + e, cfg.redcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("fallback").argb()))
+			self.list.append(getConfigListEntry(b + _("Fallback color  (a,r,g,b)") + e, cfg.fallbackcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("notavailable").argb()))
+			self.list.append(getConfigListEntry(b + _("Notavailable color  (a,r,g,b)") + e, cfg.notavailablecolor))
 			self.list.append(getConfigListEntry(_("Background color  (a,r,g,b)"), cfg.backgroundcolor))
 			self.list.append(getConfigListEntry(_("Black color  (a,r,g,b)"), cfg.blackcolor))
 			if self.get_opera_scale():
