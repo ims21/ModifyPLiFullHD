@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.30"
+VERSION = "1.31"
 #    Coded by ims (c)2015-2018
 #
 #    This program is free software; you can redistribute it and/or
@@ -127,7 +127,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def testSkin(self):
 		def testSkinCallback(choice):
 			self.close()
-		if self.current_skin in ("PLi-FullHD", "PLiHD1"):
+		if self.current_skin in ("PLi-FullHD", "PLi-HD1"):
 			self.loadMenu()
 		else:
 			self.session.openWithCallback(	testSkinCallback,
