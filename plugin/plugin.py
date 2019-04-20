@@ -5,7 +5,7 @@ from . import _
 #    Plugin for Enigma2
 #    version:
 #
-#    Coded by ims (c)2015-2018
+#    Coded by ims (c)2015-2019
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ config.plugins.ModifyPLiFullHD.enabled = ConfigYesNo(default = False)
 
 def autostart(reason, **kwargs):
 	import ui
-	if reason == 0 and config.plugins.ModifyPLiFullHD.enabled.value and config.skin.primary_skin.value.split('/')[0] in ("PLi-FullHD", "PLi-HD1") and ui.reload_skin_on_start:
+	if reason == 0 and config.plugins.ModifyPLiFullHD.enabled.value and config.skin.primary_skin.value.split('/')[0] in ("PLi-FullHD","PLi-FullNightHD","PLi-HD1") and ui.reload_skin_on_start:
 		ui.modifyskin.applyAutorun()
 
 def main(session,**kwargs):

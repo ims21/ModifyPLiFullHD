@@ -4,8 +4,8 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.31"
-#    Coded by ims (c)2015-2018
+VERSION = "1.32"
+#    Coded by ims (c)2015-2019
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ from Tools.Directories import resolveFilename, SCOPE_CONFIG
 import xml.etree.cElementTree as ET
 
 cfg = config.plugins.ModifyPLiFullHD
-cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-HD1","PLi-HD1")]))
+cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
 cfg.font = NoSave(ConfigSelection(default = "nmsbd.ttf", choices = [
 	("nmsbd.ttf","Nemesis Bold Regular"),
 	("LiberationSans-Regular.ttf","LiberationSans Regular"),
@@ -51,6 +51,7 @@ cfg.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48]))
 cfg.transponderinfocolor = NoSave(ConfigIP(default=[0,0,144,240]))
 cfg.selectedfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 cfg.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
+cfg.yellowsoftcolor = NoSave(ConfigIP(default=[0,204,172,104]))
 cfg.redcolor = NoSave(ConfigIP(default=[0,250,64,16]))
 cfg.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
 cfg.backgroundcolor = NoSave(ConfigIP(default=[0,0,0,0]))
@@ -127,12 +128,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def testSkin(self):
 		def testSkinCallback(choice):
 			self.close()
-		if self.current_skin in ("PLi-FullHD", "PLi-HD1"):
+		if self.current_skin in ("PLi-FullHD", "PLi-FullNightHD", "PLi-HD1"):
 			self.loadMenu()
 		else:
 			self.session.openWithCallback(	testSkinCallback,
 							MessageBox,
-							_("Plugin can be run under skins 'PLi-FullHD' or 'PLiHD1' only!"),
+							_("Plugin can be run under skins 'PLi-FullHD', 'PLi-FullNightHD' or 'PLiHD1' only!"),
 							type=MessageBox.TYPE_INFO, timeout=4)
 			self.close()
 
@@ -177,6 +178,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(b + _("SecondFG color  (a,r,g,b)") + e, cfg.secondfgcolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
 			self.list.append(getConfigListEntry(b + _("Yellow color  (a,r,g,b)") + e, cfg.yellowcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("yellowsoft").argb()))
+			self.list.append(getConfigListEntry(b + _("Yellowsoft color  (a,r,g,b)") + e, cfg.yellowsoftcolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("transponderinfo").argb()))
 			self.list.append(getConfigListEntry(b + _("TransponderInfo color  (a,r,g,b)") + e, cfg.transponderinfocolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("red").argb()))
@@ -210,6 +213,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		XML_NAME = "PLi-FullHD_Pars.xml"
 		if cfg.skin.value == "PLi-HD1":
 			XML_NAME = "PLi-HD1_Pars.xml"
+		elif cfg.skin.value == "PLi-FullNightHD":
+			XML_NAME = "PLi-FullNightHD_Pars.xml"
 		XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
 
 	def testFile(self, name):
@@ -222,7 +227,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return True
 
 	def saveParametersToFile(self):
-		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
+		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
 
 		def addMark(value):
 			return ''.join(("#", value))
@@ -244,6 +249,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				color.set('value', addMark(selectedfg))
 			if name == "yellow":
 				color.set('value', addMark(yellow))
+			if name == "yellowsoft":
+				color.set('value', addMark(yellowsoft))
 			if name == "red":
 				color.set('value', addMark(red))
 			if name == "secondFG":
@@ -296,6 +303,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.selectedfgcolor.value = self.map(value)
 			if name == "yellow":
 				cfg.yellowcolor.value = self.map(value)
+			if name == "yellowsoft":
+				cfg.yellowsoftcolor.value = self.map(value)
 			if name == "red":
 				cfg.redcolor.value = self.map(value)
 			if name == "secondFG":
@@ -319,6 +328,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		transponderinfo = self.l2h(cfg.transponderinfocolor.value)
 		selectedfg = self.l2h(cfg.selectedfgcolor.value)
 		yellow = self.l2h(cfg.yellowcolor.value)
+		yellowsoft = self.l2h(cfg.yellowsoftcolor.value)
 		red = self.l2h(cfg.redcolor.value)
 		secondfg = self.l2h(cfg.secondfgcolor.value)
 		fallback = self.l2h(cfg.fallbackcolor.value)
@@ -326,7 +336,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		background = self.l2h(cfg.backgroundcolor.value)
 		black = self.l2h(cfg.blackcolor.value)
 
-		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, red, secondfg, fallback, notavailable, background, black
+		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black
 
 	def l2h(self, l):
 		return "%02x%02x%02x%02x" % (l[0],l[1],l[2],l[3])
@@ -526,6 +536,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		transponderinfo = "#00808080"
 		selectedFG = "#00c8aa40"
 		yellow = "#00c8aa40"
+		yellowsoft = "#00CCAC68"
 		secondFG = "#00c8aa40"
 		red = "#00fa4010"
 		fallback = "#00a8a8c0"
@@ -571,6 +582,20 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			selectedFG = "#00fcc000"
 			yellow = "#00ffc000"
 			secondFG = "#00fcc000"
+		if typ == "fullnight":
+			toptemplatecolor = "#000D0F16"
+			basictemplatecolor = "#00000000"
+			selectorcolor = "#06303240"
+			transponderinfo = "#00f0f0f0"
+			selectedFG = "#00fcc000"
+			yellow = "#00F9C731"
+			yellowsoft = "#00CCAC68"
+			secondFG = "#00F9C731"
+			red = "#00ff4a3c"
+			fallback = "#00b0b0c0"
+			notavailable = "#005e5e5e"
+			background = "#00000000"
+			black = "#00000000"
 
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
@@ -599,6 +624,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
 		ET.SubElement( colors, 'color', name="selectedFG", value="%s" % selectedFG)
 		ET.SubElement( colors, 'color', name="yellow", value="%s" % yellow)
+		ET.SubElement( colors, 'color', name="yellowsoft", value="%s" % yellowsoft)
 		ET.SubElement( colors, 'color', name="red", value="%s" % red)
 		ET.SubElement( colors, 'color', name="secondFG", value="%s" % secondFG)
 		ET.SubElement( colors, 'color', name="fallback", value="%s" % fallback)
@@ -645,15 +671,19 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def showFileOptions(self):
 		menu = []
-		menu.append((_("Create new file with default values") , 0))
+		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
+			menu.append((_("Create new file with default values") , 0, ""))
+		elif cfg.skin.value == "PLi-FullNightHD":
+			menu.append((_("Create new file with default values") , 8, ""))
 		menu.append((_("Save current parameters"), 1))
-		menu.append((_("Delete file with parameters and close plugin"), 2))
-		menu.append((_("Create new \"%s\" file") % "F&H" , 3))
-		menu.append((_("Create new \"%s\" file") % "Purple" , 4))
-		menu.append((_("Create new \"%s\" file") % "Grey" , 5))
-		menu.append((_("Create new \"%s\" file") % "Grey 2" , 6))
-		menu.append((_("Create new \"%s\" file") % "Blue old" , 7))
-		menu.append((_("Font sizes table") , 20))
+		menu.append((_("Delete file with parameters and close plugin"), 2, ""))
+		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
+			menu.append((_("Create new \"%s\" file") % "F&H" , 3, ""))
+			menu.append((_("Create new \"%s\" file") % "Purple" , 4, ""))
+			menu.append((_("Create new \"%s\" file") % "Grey" , 5, ""))
+			menu.append((_("Create new \"%s\" file") % "Grey 2" , 6, ""))
+			menu.append((_("Create new \"%s\" file") % "Blue old" , 7, ""))
+		menu.append((_("Font sizes table") , 20, ""))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -683,6 +713,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		elif selected == 7:
 			self.createDefaultCfgFile("blueold")
 			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 8:
+			self.createDefaultCfgFile("fullnight")
+			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 20:
 			self.session.open(ModifyPLiFullHDFontInfo)
 		else:
@@ -695,7 +728,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.newColors = {}
 		self.newColorsKeys = self.newColors.keys()
 
-		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, red, secondFG, fallback, notavailable, background, black = self.getColorsFromCfg()
+		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black = self.getColorsFromCfg()
 		self.newColors = {
 			'toptemplatecolor': toptemplatecolor,
 			'basictemplatecolor': basictemplatecolor,
@@ -703,6 +736,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			'transponderinfo': transponderinfo,
 			'selectedFG': selectedFG,
 			'yellow': yellow,
+			'yellowsoft': yellowsoft,
 			'red': red,
 			'secondFG': secondFG,
 			'fallback': fallback,
