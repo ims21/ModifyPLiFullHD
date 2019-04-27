@@ -39,7 +39,7 @@ def main(session,**kwargs):
 
 def Plugins(path, **kwargs):
 	name = _("Modify PLi-FullHD")
-	descr = _("Change regular font and colors in PLi-FullHD/PLi-HD1 skin")
+	descr = _("Change regular font and colors in PLi-FullHD/PLi-FullNightHD and PLi-HD1 skins")
 	return [
 		PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc=main),
 		PluginDescriptor(name=name, description=descr, where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=autostart),

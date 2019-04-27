@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.32"
+VERSION = "1.33"
 #    Coded by ims (c)2015-2019
 #
 #    This program is free software; you can redistribute it and/or
@@ -153,7 +153,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				self["info"].setText(_("!!! Invalid format: %s, not used !!!") % XML_NAME)
 		else:
 			self["info"].setText(_("Was created new config file, restart for apply."))
-			self.createDefaultCfgFile()
+			self.createDefaultCfgFile(cfg.skin.value)
 			if not self.withApply:
 				self.backupParseFile(XML_FILE)
 
@@ -484,7 +484,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			if self.isParseable():
 				self.reloadSkin()
 		else:
-			self.createDefaultCfgFile()
+			self.createDefaultCfgFile(cfg.skin.value)
 			if self.isParseable():
 				self.reloadSkin()
 
@@ -530,19 +530,34 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return "%s/border/%s.png" % (cfg.skin.value, name)
 
 	def createDefaultCfgFile(self, typ=""):
-		toptemplatecolor = "#00000014"
-		basictemplatecolor = "#00000010"
-		selectorcolor = "#00000020"
-		transponderinfo = "#00808080"
-		selectedFG = "#00c8aa40"
-		yellow = "#00c8aa40"
-		yellowsoft = "#00CCAC68"
-		secondFG = "#00c8aa40"
-		red = "#00fa4010"
-		fallback = "#00a8a8c0"
-		notavailable = "#005e5e5e"
-		background = "#00000000"
-		black = "#00000000"
+		if typ == "PLi-FullNightHD":
+			toptemplatecolor = "#000D0F16"
+			basictemplatecolor = "#00000000"
+			selectorcolor = "#06303240"
+			transponderinfo = "#00f0f0f0"
+			selectedFG = "#00fcc000"
+			yellow = "#00F9C731"
+			yellowsoft = "#00CCAC68"
+			secondFG = "#00F9C731"
+			red = "#00ff4a3c"
+			fallback = "#00b0b0c0"
+			notavailable = "#005e5e5e"
+			background = "#00000000"
+			black = "#00000000"
+		else:
+			toptemplatecolor = "#00000014"
+			basictemplatecolor = "#00000010"
+			selectorcolor = "#00000020"
+			transponderinfo = "#00808080"
+			selectedFG = "#00c8aa40"
+			yellow = "#00c8aa40"
+			yellowsoft = "#00CCAC68"
+			secondFG = "#00c8aa40"
+			red = "#00fa4010"
+			fallback = "#00a8a8c0"
+			notavailable = "#005e5e5e"
+			background = "#00000000"
+			black = "#00000000"
 
 		if typ == "fah":
 			toptemplatecolor = "#00001414"
@@ -582,20 +597,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			selectedFG = "#00fcc000"
 			yellow = "#00ffc000"
 			secondFG = "#00fcc000"
-		if typ == "fullnight":
-			toptemplatecolor = "#000D0F16"
-			basictemplatecolor = "#00000000"
-			selectorcolor = "#06303240"
-			transponderinfo = "#00f0f0f0"
-			selectedFG = "#00fcc000"
-			yellow = "#00F9C731"
-			yellowsoft = "#00CCAC68"
-			secondFG = "#00F9C731"
-			red = "#00ff4a3c"
-			fallback = "#00b0b0c0"
-			notavailable = "#005e5e5e"
-			background = "#00000000"
-			black = "#00000000"
 
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
@@ -714,7 +715,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.createDefaultCfgFile("blueold")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 8:
-			self.createDefaultCfgFile("fullnight")
+			self.createDefaultCfgFile("PLi-FullNightHD")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 20:
 			self.session.open(ModifyPLiFullHDFontInfo)
