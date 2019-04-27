@@ -20,7 +20,7 @@ msgstr ""
 msgid "Modify PLi-FullHD"
 msgstr ""
 
-msgid "Change regular font and colors in PLi-FullHD/PLi-FullNightHD/PLi-HD1 skin"
+msgid "Change regular font and colors in PLi FullHD/FullNightHD/HD1 skins"
 msgstr ""
 
 msgid "both"

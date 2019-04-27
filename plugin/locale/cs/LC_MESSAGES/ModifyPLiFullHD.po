@@ -20,8 +20,8 @@ msgstr ""
 msgid "Modify PLi-FullHD"
 msgstr "Modifikace PLi-FullHD"
 
-msgid "Change regular font and colors in PLi-FullHD/PLi-FullNightHD/PLi-HD1 skin"
-msgstr "Změny základního fontu a barev pro PLi-FullHD/PLi-FullNightHD/PLi-HD1 skin"
+msgid "Change regular font and colors in PLi FullHD/FullNightHD/HD1 skins"
+msgstr "Změny základního fontu a barev pro PLi FullHD/FullNightHD/HD1 skin"
 
 msgid "both"
 msgstr "Obě"
