@@ -270,6 +270,38 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				font.set('filename', cfg.font.value)
 				#print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
 
+		windowstyle = tree.find('windowstyle')
+		for borderset in windowstyle.findall("borderset"):
+			for pixmap in borderset.findall("pixmap"):
+				if borderset.attrib.get("name", None) == "bsWindow":
+					if pixmap.attrib.get("pos") == "bpTopLeft":
+						pixmap.set('filename', "window/top_left_corner.png" )
+					if pixmap.attrib.get("pos") == "bpTop":
+						pixmap.set('filename', "window/top_edge.png" )
+					if pixmap.attrib.get("pos") == "bpTopRight":
+						pixmap.set('filename', "window/top_right_corner.png" )
+					if pixmap.attrib.get("pos") == "bpLeft":
+						pixmap.set('filename', "window/left_edge.png" )
+					if pixmap.attrib.get("pos") == "bpRight":
+						pixmap.set('filename', "window/right_edge.png" )
+					if pixmap.attrib.get("pos") == "bpBottomLeft":
+						pixmap.set('filename', "window/bottom_left_corner.png" )
+					if pixmap.attrib.get("pos") == "bpBottom":
+						pixmap.set('filename', "window/bottom_edge.png" )
+					if pixmap.attrib.get("pos") == "bpBottomRight":
+						pixmap.set('filename', "window/bottom_right_corner.png" )
+		for borderset in windowstyle.findall("borderset"):
+			for pixmap in borderset.findall("pixmap"):
+				if borderset.attrib.get("name", None) == "bsListboxEntry":
+					if pixmap.attrib.get("pos") == "bpTop":
+						pixmap.set('filename', self.line("line"))
+					if pixmap.attrib.get("pos") == "bpBottom":
+						pixmap.set('filename', self.line("line"))
+					if pixmap.attrib.get("pos") == "bpLeft":
+						pixmap.set('filename', self.line("vline"))
+					if pixmap.attrib.get("pos") == "bpRight":
+						pixmap.set('filename', self.line("vline"))
+
 		fo = open(XML_FILE, "w")
 		tree.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
 
