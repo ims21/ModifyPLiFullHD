@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.33"
+VERSION = "1.34"
 #    Coded by ims (c)2015-2019
 #
 #    This program is free software; you can redistribute it and/or
@@ -527,7 +527,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				elem.clear()
 
 	def line(self, name):
-		return "%s/border/%s.png" % (cfg.skin.value, name)
+		return "border/%s.png" % name
 
 	def createDefaultCfgFile(self, typ=""):
 		if typ == "PLi-FullNightHD":
@@ -649,14 +649,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( windowstyle, 'color', name="WindowTitleBackground", color="background")
 
 		bswindow = ET.SubElement( windowstyle, 'borderset', name="bsWindow")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/top_left_corner.png", pos="bpTopLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/top_edge.png", pos="bpTop")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/top_right_corner.png", pos="bpTopRight")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/left_edge.png", pos="bpLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/right_edge.png", pos="bpRight")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/bottom_left_corner.png", pos="bpBottomLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/bottom_edge.png", pos="bpBottom")
-		ET.SubElement( bswindow, 'pixmap', filename="PLi-HD/window/bottom_right_corner.png", pos="bpBottomRight")
+		ET.SubElement( bswindow, 'pixmap', filename="window/top_left_corner.png", pos="bpTopLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="window/top_edge.png", pos="bpTop")
+		ET.SubElement( bswindow, 'pixmap', filename="window/top_right_corner.png", pos="bpTopRight")
+		ET.SubElement( bswindow, 'pixmap', filename="window/left_edge.png", pos="bpLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="window/right_edge.png", pos="bpRight")
+		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_left_corner.png", pos="bpBottomLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_edge.png", pos="bpBottom")
+		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_right_corner.png", pos="bpBottomRight")
 
 		bslistboxentry = ET.SubElement( windowstyle, 'borderset', name="bsListboxEntry")
 		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpTop")
