@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.36"
+VERSION = "1.38"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -227,6 +227,13 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return True
 
 	def saveParametersToFile(self):
+		def addMark(value):
+			return ''.join(("#", value))
+
+		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
+		self.writeToFile(addMark(toptemplate), addMark(basictemplate), addMark(selector), addMark(transponderinfo), addMark(selectedfg), addMark(yellow), addMark(yellowsoft), addMark(red), addMark(secondfg), addMark(fallback), addMark(notavailable), addMark(background), addMark(black))
+
+	def saveParametersToFileOLDUnused(self):
 		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
 
 		def addMark(value):
@@ -436,6 +443,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return True
 
 	def applyChanges(self, recurse=True):
+		self.loadConfig()
 		if recurse:
 			self.oopera_scale()
 			self.setSkinPath()
@@ -635,6 +643,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			yellow = "#00ffc000"
 			secondFG = "#00fcc000"
 
+		self.writeToFile(toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black)
+
+	def writeToFile(self, toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black):
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
 			if len(elem):
