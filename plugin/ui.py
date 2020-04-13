@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.35"
+VERSION = "1.36"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -541,7 +541,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 						if cfg.selector_vertical.value in ("no", "left"):
 							borderset.remove(pixmap)
 		# call reload skin
-		skin.loadSingleSkinData(enigma.getDesktop(0), skin.GUI_SKIN_ID, root, path)
+		try:
+			skin.loadSingleSkinData(enigma.getDesktop(0), root, path)
+			print "[ModifyPLiFullHD] skin reload - old skin code"
+		except:
+			skin.loadSingleSkinData(enigma.getDesktop(0), skin.GUI_SKIN_ID, root, path)
+			print "[ModifyPLiFullHD] skin reload - new skin code"
 		for elem in root:
 			if elem.tag == 'screen':
 				name = elem.attrib.get('name', None)
