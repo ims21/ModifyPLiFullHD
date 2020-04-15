@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.38"
+VERSION = "1.39"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -443,7 +443,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return True
 
 	def applyChanges(self, recurse=True):
-		self.loadConfig()
 		if recurse:
 			self.oopera_scale()
 			self.setSkinPath()
