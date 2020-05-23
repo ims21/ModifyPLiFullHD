@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.39"
+VERSION = "1.40"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -619,6 +619,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			selectedFG = "#00dcc050"
 			yellow = "#00dcc050"
 			secondFG = "#00dcc050"
+		if typ == "violet":
+			toptemplatecolor = "#000c001e"
+			basictemplatecolor = "#000a0014"
+			selectorcolor = "#0014001e"
+			transponderinfo = "#00b0b080"
+			selectedFG = "#00dcc050"
+			yellow = "#00dcc050"
+			secondFG = "#00dcc050"
 		if typ == "grey" or typ == "grey2":
 			toptemplatecolor = "#001c1c1c"
 			basictemplatecolor = "#00181818"
@@ -633,7 +641,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				selectedFG = "#00f0b140"
 				yellow = "#00f0b140"
 				secondFG = "#00f0b140"
-		if typ == "blueold":
+		if typ == "blueclass":
 			toptemplatecolor = "#00000030"
 			basictemplatecolor = "#00000020"
 			selectorcolor = "#00000030"
@@ -720,9 +728,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def showFileOptions(self):
 		menu = []
 		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
-			menu.append((_("Create new file with default values") , 0, ""))
+			menu.append((_("Create new file with default values") , 100, ""))
 		elif cfg.skin.value == "PLi-FullNightHD":
-			menu.append((_("Create new file with default values") , 8, ""))
+			menu.append((_("Create new file with default values") , 200, ""))
 		menu.append((_("Save current parameters"), 1))
 		menu.append((_("Delete file with parameters and close plugin"), 2, ""))
 		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
@@ -730,7 +738,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			menu.append((_("Create new \"%s\" file") % "Purple" , 4, ""))
 			menu.append((_("Create new \"%s\" file") % "Grey" , 5, ""))
 			menu.append((_("Create new \"%s\" file") % "Grey 2" , 6, ""))
-			menu.append((_("Create new \"%s\" file") % "Blue old" , 7, ""))
+			menu.append((_("Create new \"%s\" file") % "Violet" , 7, ""))
+			menu.append((_("Create new \"%s\" file") % "Blue Classic" , 10, ""))
+
 		menu.append((_("Font sizes table") , 20, ""))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
 
@@ -738,7 +748,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		if choice is None:
 			return
 		selected = int(choice[1])
-		if selected == 0:
+		if selected == 100:
 			self.createDefaultCfgFile()
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 1:
@@ -759,9 +769,12 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.createDefaultCfgFile("grey2")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 7:
-			self.createDefaultCfgFile("blueold")
+			self.createDefaultCfgFile("violet")
 			self.close((self["config"].getCurrentIndex(), True))
-		elif selected == 8:
+		elif selected == 10:
+			self.createDefaultCfgFile("blueclass")
+			self.close((self["config"].getCurrentIndex(), True))
+		elif selected == 200:
 			self.createDefaultCfgFile("PLi-FullNightHD")
 			self.close((self["config"].getCurrentIndex(), True))
 		elif selected == 20:
