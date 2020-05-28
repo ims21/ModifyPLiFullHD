@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.40"
+VERSION = "1.41"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -733,7 +733,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			menu.append((_("Create new file with default values") , 200, ""))
 		menu.append((_("Save current parameters"), 1))
 		menu.append((_("Delete file with parameters and close plugin"), 2, ""))
-		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
+		if cfg.skin.value in ("PLi-HD1", "PLi-FullNightHD", "PLi-FullNightHD"):
 			menu.append((_("Create new \"%s\" file") % "F&H" , 3, ""))
 			menu.append((_("Create new \"%s\" file") % "Purple" , 4, ""))
 			menu.append((_("Create new \"%s\" file") % "Grey" , 5, ""))

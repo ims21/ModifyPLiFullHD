@@ -3,7 +3,7 @@ import setup_translate
 
 pkg = 'Extensions.ModifyPLiFullHD'
 setup (name = 'enigma2-plugin-extensions-modifyplifullhd',
-	version = '1.40',
+	version = '1.41',
 	description = 'modify font and colors for PLi-FullHD and PLi-HD1 skins',
 	packages = [pkg],
 	package_dir = {pkg: 'plugin'},
