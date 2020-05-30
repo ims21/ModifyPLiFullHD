@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.42"
+VERSION = "1.43"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -36,6 +36,8 @@ import shutil
 from Tools.Directories import resolveFilename, SCOPE_CONFIG
 import xml.etree.cElementTree as ET
 
+from plugin import plugin_path
+
 cfg = config.plugins.ModifyPLiFullHD
 cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
 cfg.font = NoSave(ConfigSelection(default = "nmsbd.ttf", choices = [
@@ -62,6 +64,7 @@ cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
 cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
 cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
 cfg.oopera_scale = ConfigSelection(default = "standard", choices = [("fullhd",_("FullHD")),("standard",_("Standard"))])
+cfg.altwin = ConfigYesNo(default = False)
 
 XML_NAME = "PLi-FullHD_Pars.xml"
 XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
@@ -196,6 +199,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(b + _("Notavailable color  (a,r,g,b)") + e, cfg.notavailablecolor))
 			self.list.append(getConfigListEntry(_("Background color  (a,r,g,b)"), cfg.backgroundcolor))
 			self.list.append(getConfigListEntry(_("Black color  (a,r,g,b)"), cfg.blackcolor))
+			if cfg.skin.value in ("PLi-FullHD", "PLi-FullNightHD"):
+				self.list.append(getConfigListEntry(_("Alternative windows border"), cfg.altwin))
 			if self.get_opera_scale():
 				self.list.append(getConfigListEntry(_("OpenOpera scale for skin"), cfg.oopera_scale))
 
@@ -287,26 +292,28 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				font.set('filename', cfg.font.value)
 				#print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
 
+		alt = plugin_path + "/win2k/"
+
 		windowstyle = tree.find('windowstyle')
 		for borderset in windowstyle.findall("borderset"):
 			for pixmap in borderset.findall("pixmap"):
 				if borderset.attrib.get("name", None) == "bsWindow":
 					if pixmap.attrib.get("pos") == "bpTopLeft":
-						pixmap.set('filename', "window/top_left_corner.png" )
+						pixmap.set('filename', "%s/top_left_corner.png" % alt if cfg.altwin.value else "window/top_left_corner.png" )
 					if pixmap.attrib.get("pos") == "bpTop":
-						pixmap.set('filename', "window/top_edge.png" )
+						pixmap.set('filename', "%s/top_edge.png" % alt if cfg.altwin.value else "window/top_edge.png" )
 					if pixmap.attrib.get("pos") == "bpTopRight":
-						pixmap.set('filename', "window/top_right_corner.png" )
+						pixmap.set('filename', "%s/top_right_corner.png" % alt if cfg.altwin.value else "window/top_right_corner.png" )
 					if pixmap.attrib.get("pos") == "bpLeft":
-						pixmap.set('filename', "window/left_edge.png" )
+						pixmap.set('filename', "%s/left_edge.png" % alt if cfg.altwin.value else "window/left_edge.png" )
 					if pixmap.attrib.get("pos") == "bpRight":
-						pixmap.set('filename', "window/right_edge.png" )
+						pixmap.set('filename', "%s/right_edge.png" % alt if cfg.altwin.value else "window/right_edge.png" )
 					if pixmap.attrib.get("pos") == "bpBottomLeft":
-						pixmap.set('filename', "window/bottom_left_corner.png" )
+						pixmap.set('filename', "%s/bottom_left_corner.png" % alt if cfg.altwin.value else "window/bottom_left_corner.png" )
 					if pixmap.attrib.get("pos") == "bpBottom":
-						pixmap.set('filename', "window/bottom_edge.png" )
+						pixmap.set('filename', "%s/bottom_edge.png" % alt if cfg.altwin.value else "window/bottom_edge.png" )
 					if pixmap.attrib.get("pos") == "bpBottomRight":
-						pixmap.set('filename', "window/bottom_right_corner.png" )
+						pixmap.set('filename', "%s/bottom_right_corner.png" % alt if cfg.altwin.value else "window/bottom_right_corner.png" )
 		for borderset in windowstyle.findall("borderset"):
 			for pixmap in borderset.findall("pixmap"):
 				if borderset.attrib.get("name", None) == "bsListboxEntry":
@@ -416,6 +423,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def saveConfig(self):
 		cfg.enabled.save()
 		cfg.selector_vertical.save()
+		cfg.altwin.save()
 
 	def keyCancel(self):
 		if self["config"].isChanged():
@@ -725,15 +733,17 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( windowstyle, 'color', name="WindowTitleForeground", color="foreground")
 		ET.SubElement( windowstyle, 'color', name="WindowTitleBackground", color="background")
 
+		alt = plugin_path + "/win2k/"
+
 		bswindow = ET.SubElement( windowstyle, 'borderset', name="bsWindow")
-		ET.SubElement( bswindow, 'pixmap', filename="window/top_left_corner.png", pos="bpTopLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="window/top_edge.png", pos="bpTop")
-		ET.SubElement( bswindow, 'pixmap', filename="window/top_right_corner.png", pos="bpTopRight")
-		ET.SubElement( bswindow, 'pixmap', filename="window/left_edge.png", pos="bpLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="window/right_edge.png", pos="bpRight")
-		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_left_corner.png", pos="bpBottomLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_edge.png", pos="bpBottom")
-		ET.SubElement( bswindow, 'pixmap', filename="window/bottom_right_corner.png", pos="bpBottomRight")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/top_left_corner.png" % alt if cfg.altwin.value else "window/top_left_corner.png", pos="bpTopLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/top_edge.png" % alt if cfg.altwin.value else "window/top_edge.png", pos="bpTop")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/top_right_corner.png" % alt if cfg.altwin.value else "window/top_right_corner.png", pos="bpTopRight")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/left_edge.png" % alt if cfg.altwin.value else "window/left_edge.png", pos="bpLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/right_edge.png" % alt if cfg.altwin.value else "window/right_edge.png", pos="bpRight")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_left_corner.png" % alt if cfg.altwin.value else "window/bottom_left_corner.png", pos="bpBottomLeft")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_edge.png" % alt if cfg.altwin.value else "window/bottom_edge.png", pos="bpBottom")
+		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_right_corner.png" % alt if cfg.altwin.value else "window/bottom_right_corner.png", pos="bpBottomRight")
 
 		bslistboxentry = ET.SubElement( windowstyle, 'borderset', name="bsListboxEntry")
 		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpTop")

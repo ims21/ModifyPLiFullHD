@@ -154,5 +154,8 @@ msgstr ""
 msgid "Font size / line height (px)"
 msgstr ""
 
+msgid "Alternative window borders"
+msgstr ""
+
 msgid "Select font"
 msgstr ""
