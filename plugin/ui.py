@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.41"
+VERSION = "1.42"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -54,6 +54,8 @@ cfg.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
 cfg.yellowsoftcolor = NoSave(ConfigIP(default=[0,204,172,104]))
 cfg.redcolor = NoSave(ConfigIP(default=[0,250,64,16]))
 cfg.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
+cfg.greycolor = NoSave(ConfigIP(default=[0,170,170,170]))
+cfg.darkgreycolor = NoSave(ConfigIP(default=[0,85,85,85]))
 cfg.backgroundcolor = NoSave(ConfigIP(default=[0,0,0,0]))
 cfg.blackcolor = NoSave(ConfigIP(default=[0,0,0,0]))
 cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
@@ -184,6 +186,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(b + _("TransponderInfo color  (a,r,g,b)") + e, cfg.transponderinfocolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("red").argb()))
 			self.list.append(getConfigListEntry(b + _("Red color  (a,r,g,b)") + e, cfg.redcolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("grey").argb()))
+			self.list.append(getConfigListEntry(b + _("Grey color  (a,r,g,b)") + e, cfg.greycolor))
+			b = "\c%s" % hex2strColor(int(skin.parseColor("darkgrey").argb()))
+			self.list.append(getConfigListEntry(b + _("Darkgrey color  (a,r,g,b)") + e, cfg.darkgreycolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("fallback").argb()))
 			self.list.append(getConfigListEntry(b + _("Fallback color  (a,r,g,b)") + e, cfg.fallbackcolor))
 			b = "\c%s" % hex2strColor(int(skin.parseColor("notavailable").argb()))
@@ -230,11 +236,11 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		def addMark(value):
 			return ''.join(("#", value))
 
-		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
-		self.writeToFile(addMark(toptemplate), addMark(basictemplate), addMark(selector), addMark(transponderinfo), addMark(selectedfg), addMark(yellow), addMark(yellowsoft), addMark(red), addMark(secondfg), addMark(fallback), addMark(notavailable), addMark(background), addMark(black))
+		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, grey, darkgrey, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
+		self.writeToFile(addMark(toptemplate), addMark(basictemplate), addMark(selector), addMark(transponderinfo), addMark(selectedfg), addMark(yellow), addMark(yellowsoft), addMark(red), addMark(grey), addMark(darkgrey), addMark(secondfg), addMark(fallback), addMark(notavailable), addMark(background), addMark(black))
 
 	def saveParametersToFileOLDUnused(self):
-		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
+		toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, grey, darkgrey, secondfg, fallback, notavailable, background, black = self.getColorsFromCfg()
 
 		def addMark(value):
 			return ''.join(("#", value))
@@ -260,6 +266,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				color.set('value', addMark(yellowsoft))
 			if name == "red":
 				color.set('value', addMark(red))
+			if name == "grey":
+				color.set('value', addMark(grey))
+			if name == "darkgrey":
+				color.set('value', addMark(darkgrey))
 			if name == "secondFG":
 				color.set('value', addMark(secondfg))
 			if name == "fallback":
@@ -346,6 +356,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.yellowsoftcolor.value = self.map(value)
 			if name == "red":
 				cfg.redcolor.value = self.map(value)
+			if name == "grey":
+				cfg.greycolor.value = self.map(value)
+			if name == "darkgrey":
+				cfg.darkgreycolor.value = self.map(value)
 			if name == "secondFG":
 				cfg.secondfgcolor.value = self.map(value)
 			if name == "fallback":
@@ -369,13 +383,15 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		yellow = self.l2h(cfg.yellowcolor.value)
 		yellowsoft = self.l2h(cfg.yellowsoftcolor.value)
 		red = self.l2h(cfg.redcolor.value)
+		grey = self.l2h(cfg.greycolor.value)
+		darkgrey = self.l2h(cfg.darkgreycolor.value)
 		secondfg = self.l2h(cfg.secondfgcolor.value)
 		fallback = self.l2h(cfg.fallbackcolor.value)
 		notavailable = self.l2h(cfg.notavailablecolor.value)
 		background = self.l2h(cfg.backgroundcolor.value)
 		black = self.l2h(cfg.blackcolor.value)
 
-		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, secondfg, fallback, notavailable, background, black
+		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, grey, darkgrey, secondfg, fallback, notavailable, background, black
 
 	def l2h(self, l):
 		return "%02x%02x%02x%02x" % (l[0],l[1],l[2],l[3])
@@ -584,6 +600,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			yellowsoft = "#00CCAC68"
 			secondFG = "#00F9C731"
 			red = "#00ff4a3c"
+			grey = "#00aaaaaa"
+			darkgrey = "#00555555"
 			fallback = "#00b0b0c0"
 			notavailable = "#005e5e5e"
 			background = "#00000000"
@@ -598,6 +616,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			yellowsoft = "#00CCAC68"
 			secondFG = "#00c8aa40"
 			red = "#00fa4010"
+			grey = "#00aaaaaa"
+			darkgrey = "#00555555"
 			fallback = "#00a8a8c0"
 			notavailable = "#005e5e5e"
 			background = "#00000000"
@@ -650,9 +670,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			yellow = "#00ffc000"
 			secondFG = "#00fcc000"
 
-		self.writeToFile(toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black)
+		self.writeToFile(toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, grey, darkgrey, secondFG, fallback, notavailable, background, black)
 
-	def writeToFile(self, toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black):
+	def writeToFile(self, toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, grey, darkgrey, secondFG, fallback, notavailable, background, black):
 		def indent(elem, level=0):
 			i = "\n" + level*"  "
 			if len(elem):
@@ -682,6 +702,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		ET.SubElement( colors, 'color', name="yellow", value="%s" % yellow)
 		ET.SubElement( colors, 'color', name="yellowsoft", value="%s" % yellowsoft)
 		ET.SubElement( colors, 'color', name="red", value="%s" % red)
+		ET.SubElement( colors, 'color', name="grey", value="%s" % grey)
+		ET.SubElement( colors, 'color', name="darkgrey", value="%s" % darkgrey)
 		ET.SubElement( colors, 'color', name="secondFG", value="%s" % secondFG)
 		ET.SubElement( colors, 'color', name="fallback", value="%s" % fallback)
 		ET.SubElement( colors, 'color', name="notavailable", value="%s" % notavailable)
@@ -789,7 +811,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.newColors = {}
 		self.newColorsKeys = self.newColors.keys()
 
-		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, secondFG, fallback, notavailable, background, black = self.getColorsFromCfg()
+		toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, grey, darkgrey, secondFG, fallback, notavailable, background, black = self.getColorsFromCfg()
 		self.newColors = {
 			'toptemplatecolor': toptemplatecolor,
 			'basictemplatecolor': basictemplatecolor,
@@ -799,6 +821,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			'yellow': yellow,
 			'yellowsoft': yellowsoft,
 			'red': red,
+			'grey': grey,
+			'darkgrey': darkgrey,
 			'secondFG': secondFG,
 			'fallback': fallback,
 			'notavailable': notavailable,
