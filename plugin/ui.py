@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.44"
+VERSION = "1.45"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -116,11 +116,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self["key_blue"] = Label(_("Options"))
 		self["info"]= Label()
 
-		self.title = _("Modify PLi-FullHD - setup font and colors") + _(" - v.%s") % VERSION
-		self.setTitle(self.title)
-
 		self.wrong_xml = False
 		self.selectionChoiceBox = 0
+
+		self.titleText = _("Modify PLi-FullHD - setup font and colors") + _(" - v.%s") % VERSION
 
 		self.current_skin = config.skin.primary_skin.value.split('/')[0]
 		cfg.skin.value = self.current_skin
@@ -131,6 +130,8 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.onShown.append(self.testSkin)
 
 	def testSkin(self):
+		self.setTitle(self.titleText)
+
 		def testSkinCallback(choice):
 			self.close()
 		if self.current_skin in ("PLi-FullHD", "PLi-FullNightHD", "PLi-HD1"):
@@ -410,7 +411,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		if self["config"].isChanged() and self.current_skin == cfg.skin.value:
 			self.saveConfig()
 			restartbox = self.session.openWithCallback(self.applyCallback, MessageBox, _("Some screens could be in old colors still.\nDo you want to restart the GUI now?"))
-			restartbox.setTitle(self.title)
+			restartbox.setTitle(self.titleText)
 		else:
 			self.saveConfig()
 			self.close()
@@ -428,7 +429,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def keyCancel(self):
 		if self["config"].isChanged():
 			restartbox = self.session.openWithCallback(self.cancelCallback, MessageBox, _("Really close without apply changes?"))
-			restartbox.setTitle(self.title)
+			restartbox.setTitle(self.titleText)
 		else:
 			self.close()
 
