@@ -4,7 +4,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.45"
+VERSION = "1.46"
 #    Coded by ims (c)2015-2020
 #
 #    This program is free software; you can redistribute it and/or
@@ -33,20 +33,13 @@ import os
 import skin
 import enigma
 import shutil
-from Tools.Directories import resolveFilename, SCOPE_CONFIG
+from Tools.Directories import resolveFilename, SCOPE_CONFIG, SCOPE_CURRENT_SKIN, fileExists, SCOPE_FONTS
 import xml.etree.cElementTree as ET
-
+import glob
 from plugin import plugin_path
 
 cfg = config.plugins.ModifyPLiFullHD
 cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
-cfg.font = NoSave(ConfigSelection(default = "nmsbd.ttf", choices = [
-	("nmsbd.ttf","Nemesis Bold Regular"),
-	("LiberationSans-Regular.ttf","LiberationSans Regular"),
-	("LiberationSans-Italic.ttf","LiberationSans Italic"),
-	("LiberationSans-Bold.ttf","LiberationSans Bold"),
-	("LiberationSans-BoldItalic.ttf","LiberationSans Bold Italic")
-	]))
 cfg.toptemplatecolor = NoSave(ConfigIP(default=[0,0,0,48]))
 cfg.basictemplatecolor = NoSave(ConfigIP(default=[0,0,0,32]))
 cfg.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48]))
@@ -96,6 +89,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.session = session
 		self.menuSelectedIndex = selected
 		self.withApply = show_apply
+
+		choicelist = self.readFonts()
+		cfg.font = NoSave(ConfigSelection(default = "LiberationSans-Regular.ttf", choices = choicelist))
+
 		self.list = []
 		self.onChangedEntry = []
 
@@ -142,6 +139,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 							_("Plugin can be run under skins 'PLi-FullHD', 'PLi-FullNightHD' or 'PLiHD1' only!"),
 							type=MessageBox.TYPE_INFO, timeout=4)
 			self.close()
+
+	def readFonts(self):
+		path = resolveFilename(SCOPE_FONTS)
+		return [file.replace(path, "") for file in sorted(glob.glob(path + "*.ttf"))]
 
 	def loadMenu(self):
 		self.showButtons()
@@ -700,7 +701,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		root = ET.Element('skin')
 
 		fonts = ET.SubElement(root, 'fonts')
-		ET.SubElement( fonts, 'font', filename="LiberationSans-Regular.ttf", name="Regular", scale="100")
+		ET.SubElement( fonts, 'font', filename="%s" % cfg.font.value, name="Regular", scale="100")
 
 		colors = ET.SubElement(root, 'colors')
 		ET.SubElement( colors, 'color', name="toptemplatecolor", value="%s" % toptemplatecolor)
@@ -856,8 +857,6 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 modifyskin = ModifyPLiFullHD(Screen)
 
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, fileExists
-import xml.etree.cElementTree as ET
 class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 	skin = """
 	<screen name="ModifyPLiFullHDFontInfo" position="center,center" size="610,520" title="Modify PLi-FullHD - font info" backgroundColor="#31000000">
