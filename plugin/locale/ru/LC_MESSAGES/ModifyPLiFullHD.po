@@ -1,0 +1,174 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ModifyPLiFullHD\n"
+"POT-Creation-Date: 2020-08-18 19:31+0300\n"
+"PO-Revision-Date: 2020-08-18 22:05+0300\n"
+"Last-Translator: Vladimir.F <volodya072@yahoo.com>\n"
+"Language-Team: <Duremar>\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-Basepath: ModifyPLiFullHD-master\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 "
+"&& (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Modify PLi-FullHD"
+msgstr "Модификация PLi-FullHD"
+
+msgid "Change regular font and colors in PLi FullHD/FullNightHD/HD1 skins"
+msgstr "Изменение обычного шрифта и цветов в PLi FullHD/FullNightHD/HD1 скинах"
+
+msgid "both"
+msgstr "оба"
+
+msgid "left only"
+msgstr "левый только"
+
+msgid "right only"
+msgstr "правый только"
+
+msgid "none"
+msgstr "никакой"
+
+msgid "FullHD"
+msgstr "FullHD"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Options"
+msgstr "Варианты"
+
+msgid "Modify PLi-FullHD - setup font and colors"
+msgstr "Модификация PLi-FullHD - настройка шрифта и цветов"
+
+#, python-format
+msgid " - v.%s"
+msgstr " - в.%s"
+
+msgid ""
+"Plugin can be run under skins 'PLi-FullHD', 'PLi-FullNightHD' or 'PLiHD1' only!"
+msgstr ""
+"Плагин может работать только со скинами 'PLi-FullHD', 'PLi-FullNightHD' или "
+"'PLiHD1'!"
+
+#, python-format
+msgid "!!! Invalid format: %s, not used !!!"
+msgstr "!!! Недопустимый формат: %s, не используется !!!"
+
+msgid "Was created new config file, restart for apply."
+msgstr "Был создан новый конфигурационный файл, перезагрузите GUI для применения."
+
+msgid "Use modify skin"
+msgstr "Использовать модифицированный скин"
+
+msgid "Skin"
+msgstr "Скин"
+
+msgid "Regular font"
+msgstr "Обычный шрифт"
+
+msgid "Top color  (a,r,g,b)"
+msgstr "Верхний цвет  (a,r,g,b)"
+
+msgid "Selector color  (a,r,g,b)"
+msgstr "Цвет выбранного сервиса  (a,r,g,b)"
+
+msgid "Bottom color  (a,r,g,b)"
+msgstr "Нижний цвет  (a,r,g,b)"
+
+msgid "Vertical selector's lines"
+msgstr "Вертикальные линии селектора"
+
+msgid "SelectedFG color  (a,r,g,b)"
+msgstr "ВыбранныйFG цвет  (a,r,g,b)"
+
+msgid "SecondFG color  (a,r,g,b)"
+msgstr "ВторойFG цвет  (a,r,g,b)"
+
+msgid "Yellow color  (a,r,g,b)"
+msgstr "Жёлтый цвет  (a,r,g,b)"
+
+msgid "Yellowsoft color  (a,r,g,b)"
+msgstr "Нежно-жёлтый цвет  (a,r,g,b)"
+
+msgid "TransponderInfo color  (a,r,g,b)"
+msgstr "Информация транспондера - цвет  (a,r,g,b)"
+
+msgid "Red color  (a,r,g,b)"
+msgstr "Красный цвет  (a,r,g,b)"
+
+msgid "Grey color  (a,r,g,b)"
+msgstr "Серый цвет  (a,r,g,b)"
+
+msgid "Darkgrey color  (a,r,g,b)"
+msgstr "Тёмно-серый цвет  (a,r,g,b)"
+
+msgid "Fallback color  (a,r,g,b)"
+msgstr "Резервный тюнер - цвет  (a,r,g,b)"
+
+msgid "Notavailable color  (a,r,g,b)"
+msgstr "Недоступный сервис - цвет  (a,r,g,b)"
+
+msgid "Background color  (a,r,g,b)"
+msgstr "Фоновый цвет  (a,r,g,b)"
+
+msgid "Black color  (a,r,g,b)"
+msgstr "Чёрный цвет  (a,r,g,b)"
+
+msgid "Alternative windows border"
+msgstr "Альтернативная граница окон"
+
+msgid "OpenOpera scale for skin"
+msgstr "масштаб OpenOpera для скина"
+
+msgid ""
+"Some screens could be in old colors still.\n"
+"Do you want to restart the GUI now?"
+msgstr ""
+"Некоторые окна могут быть всё ещё в старых цветах.\n"
+"Вы хотите перезапустить GUI прямо сейчас?"
+
+msgid "Really close without apply changes?"
+msgstr "Действительно закрыть без применения изменений?"
+
+msgid "Create new file with default values"
+msgstr "Создать новый файл со значениями по умолчанию"
+
+msgid "Save current parameters"
+msgstr "Сохранить текущие параметры"
+
+msgid "Delete file with parameters and close plugin"
+msgstr "Удалить файл с параметрами и закрыть плагин"
+
+#, python-format
+msgid "Create new \"%s\" file"
+msgstr "Создать новый \"%s\" файл"
+
+msgid "Font sizes table"
+msgstr "Таблица размеров шрифта"
+
+msgid "Operations with configuration file"
+msgstr "Операции с файлом конфигурации"
+
+msgid "Modify PLi-FullHD font info"
+msgstr "Изменить шрифт/цвет PLi-FullHD"
+
+msgid "Font size / line height (px)"
+msgstr "Размер шрифта / высота строки (px)"
+
+msgid "Select font"
+msgstr "Выбрать шрифт"
