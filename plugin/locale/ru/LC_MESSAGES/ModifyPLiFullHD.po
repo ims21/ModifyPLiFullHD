@@ -85,7 +85,7 @@ msgid "Top color  (a,r,g,b)"
 msgstr "Верхний цвет  (a,r,g,b)"
 
 msgid "Selector color  (a,r,g,b)"
-msgstr "Цвет выбранного сервиса  (a,r,g,b)"
+msgstr "Цвет селектора  (a,r,g,b)"
 
 msgid "Bottom color  (a,r,g,b)"
 msgstr "Нижний цвет  (a,r,g,b)"
@@ -94,16 +94,16 @@ msgid "Vertical selector's lines"
 msgstr "Вертикальные линии селектора"
 
 msgid "SelectedFG color  (a,r,g,b)"
-msgstr "ВыбранныйFG цвет  (a,r,g,b)"
+msgstr "SelectedFG цвет  (a,r,g,b)"
 
 msgid "SecondFG color  (a,r,g,b)"
-msgstr "ВторойFG цвет  (a,r,g,b)"
+msgstr "SecondFG цвет  (a,r,g,b)"
 
 msgid "Yellow color  (a,r,g,b)"
 msgstr "Жёлтый цвет  (a,r,g,b)"
 
 msgid "Yellowsoft color  (a,r,g,b)"
-msgstr "Нежно-жёлтый цвет  (a,r,g,b)"
+msgstr "Yellowsoft - цвет  (a,r,g,b)"
 
 msgid "TransponderInfo color  (a,r,g,b)"
 msgstr "Информация транспондера - цвет  (a,r,g,b)"
