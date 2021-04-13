@@ -69,7 +69,7 @@ reload_skin_on_start = True
 def hex2strColor(argb):
 	out = ""
 	for i in range(28,-1,-4):
-		out += "%s" % chr(0x30 + (argb>>i & 0xf))
+		out += "%s" % chr(0x30 + (argb >> i & 0xf))
 	return out
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
@@ -111,7 +111,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self["key_red"] = Label(_("Cancel"))
 		self["key_yellow"] = Label(_("Apply"))
 		self["key_blue"] = Label(_("Options"))
-		self["info"]= Label()
+		self["info"] = Label()
 
 		self.wrong_xml = False
 		self.selectionChoiceBox = 0
@@ -446,7 +446,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			os.unlink(name)
 	def backupParseFile(self, name):
 		if self.testFile(BACKUP):
-			if  not self.withApply:
+			if not self.withApply:
 				os.unlink(BACKUP)
 				shutil.copyfile(name, BACKUP)
 				return True
@@ -570,7 +570,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					if pixmap.attrib.get("pos") == "bpLeft":
 						if cfg.selector_vertical.value in ("no", "right"):
 							borderset.remove(pixmap)
-					if pixmap.attrib.get("pos") ==  "bpRight":
+					if pixmap.attrib.get("pos") == "bpRight":
 						if cfg.selector_vertical.value in ("no", "left"):
 							borderset.remove(pixmap)
 		# call reload skin
@@ -684,14 +684,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def writeToFile(self, toptemplatecolor, basictemplatecolor, selectorcolor, transponderinfo, selectedFG, yellow, yellowsoft, red, grey, darkgrey, secondFG, fallback, notavailable, background, black):
 		def indent(elem, level=0):
-			i = "\n" + level*"  "
+			i = "\n" + level * "  "
 			if len(elem):
 				if not elem.text or not elem.text.strip():
 					elem.text = i + "  "
 				if not elem.tail or not elem.tail.strip():
 					elem.tail = i
 				for elem in elem:
-					indent(elem, level+1)
+					indent(elem, level + 1)
 				if not elem.tail or not elem.tail.strip():
 					elem.tail = i
 			else:
@@ -911,9 +911,9 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		info = ""
 		for h in range(1,21):
 			info += ("%02d / %02d\t") % (h, self.lineHeight(h, family))
-			info += ("%02d / %02d\t") % (h+20, self.lineHeight(h+20, family))
-			info += ("%02d / %02d\t") % (h+40, self.lineHeight(h+40, family))
-			info += ("%02d / %02d") % (h+60, self.lineHeight(h+60, family))
+			info += ("%02d / %02d\t") % (h + 20, self.lineHeight(h + 20, family))
+			info += ("%02d / %02d\t") % (h + 40, self.lineHeight(h + 40, family))
+			info += ("%02d / %02d") % (h + 60, self.lineHeight(h + 60, family))
 			info += ("\n")
 		self["fontsinfo"].setText(info)
 
