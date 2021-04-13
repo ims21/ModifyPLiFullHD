@@ -66,11 +66,13 @@ OPERA_INI_PATH = "/usr/local/OpenOpera/home/opera.ini"
 
 reload_skin_on_start = True
 
+
 def hex2strColor(argb):
 	out = ""
 	for i in range(28, -1, -4):
 		out += "%s" % chr(0x30 + (argb >> i & 0xf))
 	return out
+
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
@@ -444,6 +446,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def deleteParseFile(self, name):
 		if self.testFile(name):
 			os.unlink(name)
+
 	def backupParseFile(self, name):
 		if self.testFile(BACKUP):
 			if not self.withApply:
@@ -453,6 +456,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			return False
 		shutil.copyfile(name, BACKUP)
 		return True
+
 	def useBackupFile(self):
 		if self.testFile(BACKUP):
 			shutil.move(BACKUP, XML_FILE)
@@ -859,7 +863,9 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				skin.colorNames[n] = skin.parseColor("#%s" % self.newColors[n])
 ###
 
+
 modifyskin = ModifyPLiFullHD(Screen)
+
 
 class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 	skin = """
