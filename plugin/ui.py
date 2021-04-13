@@ -96,7 +96,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list = []
 		self.onChangedEntry = []
 
-		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry )
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry)
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
@@ -170,10 +170,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def loadConfig(self):
 		self.list = []
-		self.list.append(getConfigListEntry(self.skin_enabled ,cfg.enabled))
+		self.list.append(getConfigListEntry(self.skin_enabled,cfg.enabled))
 		if cfg.enabled.value:
 			e = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
-			self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
+			self.list.append(getConfigListEntry(self.skin_name, cfg.skin))
 			self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
 			self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
 			self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
@@ -301,21 +301,21 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			for pixmap in borderset.findall("pixmap"):
 				if borderset.attrib.get("name", None) == "bsWindow":
 					if pixmap.attrib.get("pos") == "bpTopLeft":
-						pixmap.set('filename', "%s/top_left_corner.png" % alt if cfg.altwin.value else "window/top_left_corner.png" )
+						pixmap.set('filename', "%s/top_left_corner.png" % alt if cfg.altwin.value else "window/top_left_corner.png")
 					if pixmap.attrib.get("pos") == "bpTop":
-						pixmap.set('filename', "%s/top_edge.png" % alt if cfg.altwin.value else "window/top_edge.png" )
+						pixmap.set('filename', "%s/top_edge.png" % alt if cfg.altwin.value else "window/top_edge.png")
 					if pixmap.attrib.get("pos") == "bpTopRight":
-						pixmap.set('filename', "%s/top_right_corner.png" % alt if cfg.altwin.value else "window/top_right_corner.png" )
+						pixmap.set('filename', "%s/top_right_corner.png" % alt if cfg.altwin.value else "window/top_right_corner.png")
 					if pixmap.attrib.get("pos") == "bpLeft":
-						pixmap.set('filename', "%s/left_edge.png" % alt if cfg.altwin.value else "window/left_edge.png" )
+						pixmap.set('filename', "%s/left_edge.png" % alt if cfg.altwin.value else "window/left_edge.png")
 					if pixmap.attrib.get("pos") == "bpRight":
-						pixmap.set('filename', "%s/right_edge.png" % alt if cfg.altwin.value else "window/right_edge.png" )
+						pixmap.set('filename', "%s/right_edge.png" % alt if cfg.altwin.value else "window/right_edge.png")
 					if pixmap.attrib.get("pos") == "bpBottomLeft":
-						pixmap.set('filename', "%s/bottom_left_corner.png" % alt if cfg.altwin.value else "window/bottom_left_corner.png" )
+						pixmap.set('filename', "%s/bottom_left_corner.png" % alt if cfg.altwin.value else "window/bottom_left_corner.png")
 					if pixmap.attrib.get("pos") == "bpBottom":
-						pixmap.set('filename', "%s/bottom_edge.png" % alt if cfg.altwin.value else "window/bottom_edge.png" )
+						pixmap.set('filename', "%s/bottom_edge.png" % alt if cfg.altwin.value else "window/bottom_edge.png")
 					if pixmap.attrib.get("pos") == "bpBottomRight":
-						pixmap.set('filename', "%s/bottom_right_corner.png" % alt if cfg.altwin.value else "window/bottom_right_corner.png" )
+						pixmap.set('filename', "%s/bottom_right_corner.png" % alt if cfg.altwin.value else "window/bottom_right_corner.png")
 		for borderset in windowstyle.findall("borderset"):
 			for pixmap in borderset.findall("pixmap"):
 				if borderset.attrib.get("name", None) == "bsListboxEntry":
@@ -484,14 +484,14 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def oopera_scale(self):
 		status = self.get_opera_scale()
 		if status:
-			if "fullhd" in cfg.oopera_scale.value and status == "standard" :
+			if "fullhd" in cfg.oopera_scale.value and status == "standard":
 				os.system("sed -i 's/Scale=100/Scale=150/' %s" % OPERA_INI_PATH)
 			elif "standard" in cfg.oopera_scale.value and status == "fullhd":
 				os.system("sed -i 's/Scale=150/Scale=100/' %s" % OPERA_INI_PATH)
 
 	def get_opera_scale(self):
 		try:
-			fi = open(OPERA_INI_PATH ,"r")
+			fi = open(OPERA_INI_PATH,"r")
 			for line in fi.readlines():
 				if "Scale" in line:
 					if line[-4:-1] == "100":
@@ -701,39 +701,39 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		root = ET.Element('skin')
 
 		fonts = ET.SubElement(root, 'fonts')
-		ET.SubElement( fonts, 'font', filename="%s" % cfg.font.value, name="Regular", scale="100")
+		ET.SubElement(fonts, 'font', filename="%s" % cfg.font.value, name="Regular", scale="100")
 
 		colors = ET.SubElement(root, 'colors')
-		ET.SubElement( colors, 'color', name="toptemplatecolor", value="%s" % toptemplatecolor)
-		ET.SubElement( colors, 'color', name="basictemplatecolor", value="%s" % basictemplatecolor)
-		ET.SubElement( colors, 'color', name="selectorcolor", value="%s" % selectorcolor)
-		ET.SubElement( colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
-		ET.SubElement( colors, 'color', name="selectedFG", value="%s" % selectedFG)
-		ET.SubElement( colors, 'color', name="yellow", value="%s" % yellow)
-		ET.SubElement( colors, 'color', name="yellowsoft", value="%s" % yellowsoft)
-		ET.SubElement( colors, 'color', name="red", value="%s" % red)
-		ET.SubElement( colors, 'color', name="grey", value="%s" % grey)
-		ET.SubElement( colors, 'color', name="darkgrey", value="%s" % darkgrey)
-		ET.SubElement( colors, 'color', name="secondFG", value="%s" % secondFG)
-		ET.SubElement( colors, 'color', name="fallback", value="%s" % fallback)
-		ET.SubElement( colors, 'color', name="notavailable", value="%s" % notavailable)
-		ET.SubElement( colors, 'color', name="background", value="%s" % background)
-		ET.SubElement( colors, 'color', name="black", value="%s" % black)
+		ET.SubElement(colors, 'color', name="toptemplatecolor", value="%s" % toptemplatecolor)
+		ET.SubElement(colors, 'color', name="basictemplatecolor", value="%s" % basictemplatecolor)
+		ET.SubElement(colors, 'color', name="selectorcolor", value="%s" % selectorcolor)
+		ET.SubElement(colors, 'color', name="transponderinfo", value="%s" % transponderinfo)
+		ET.SubElement(colors, 'color', name="selectedFG", value="%s" % selectedFG)
+		ET.SubElement(colors, 'color', name="yellow", value="%s" % yellow)
+		ET.SubElement(colors, 'color', name="yellowsoft", value="%s" % yellowsoft)
+		ET.SubElement(colors, 'color', name="red", value="%s" % red)
+		ET.SubElement(colors, 'color', name="grey", value="%s" % grey)
+		ET.SubElement(colors, 'color', name="darkgrey", value="%s" % darkgrey)
+		ET.SubElement(colors, 'color', name="secondFG", value="%s" % secondFG)
+		ET.SubElement(colors, 'color', name="fallback", value="%s" % fallback)
+		ET.SubElement(colors, 'color', name="notavailable", value="%s" % notavailable)
+		ET.SubElement(colors, 'color', name="background", value="%s" % background)
+		ET.SubElement(colors, 'color', name="black", value="%s" % black)
 
 		windowstyle = ET.SubElement(root, 'windowstyle', id="0", type="skinned")
-		ET.SubElement( windowstyle, 'title', offset="20,6", font="Regular;26")
-		ET.SubElement( windowstyle, 'color', name="Background", color="background")
-		ET.SubElement( windowstyle, 'color', name="LabelForeground", color="foreground")
-		ET.SubElement( windowstyle, 'color', name="ListboxBackground", color="background")
-		ET.SubElement( windowstyle, 'color', name="ListboxForeground", color="foreground")
-		ET.SubElement( windowstyle, 'color', name="ListboxSelectedBackground", color="selectorcolor")
-		ET.SubElement( windowstyle, 'color', name="ListboxSelectedForeground", color="selectedFG")
-		ET.SubElement( windowstyle, 'color', name="ListboxMarkedBackground", color="un40a0aa0")
-		ET.SubElement( windowstyle, 'color', name="ListboxMarkedForeground", color="red")
-		ET.SubElement( windowstyle, 'color', name="ListboxMarkedAndSelectedBackground", color="un4a00a0a")
-		ET.SubElement( windowstyle, 'color', name="ListboxMarkedAndSelectedForeground", color="red")
-		ET.SubElement( windowstyle, 'color', name="WindowTitleForeground", color="foreground")
-		ET.SubElement( windowstyle, 'color', name="WindowTitleBackground", color="background")
+		ET.SubElement(windowstyle, 'title', offset="20,6", font="Regular;26")
+		ET.SubElement(windowstyle, 'color', name="Background", color="background")
+		ET.SubElement(windowstyle, 'color', name="LabelForeground", color="foreground")
+		ET.SubElement(windowstyle, 'color', name="ListboxBackground", color="background")
+		ET.SubElement(windowstyle, 'color', name="ListboxForeground", color="foreground")
+		ET.SubElement(windowstyle, 'color', name="ListboxSelectedBackground", color="selectorcolor")
+		ET.SubElement(windowstyle, 'color', name="ListboxSelectedForeground", color="selectedFG")
+		ET.SubElement(windowstyle, 'color', name="ListboxMarkedBackground", color="un40a0aa0")
+		ET.SubElement(windowstyle, 'color', name="ListboxMarkedForeground", color="red")
+		ET.SubElement(windowstyle, 'color', name="ListboxMarkedAndSelectedBackground", color="un4a00a0a")
+		ET.SubElement(windowstyle, 'color', name="ListboxMarkedAndSelectedForeground", color="red")
+		ET.SubElement(windowstyle, 'color', name="WindowTitleForeground", color="foreground")
+		ET.SubElement(windowstyle, 'color', name="WindowTitleBackground", color="background")
 
 		bsWinPath = "window"
 		if self.current_skin == "PLi-HD1": # HD1 using HD bswindow pictures
@@ -741,21 +741,21 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		elif cfg.altwin.value: # alternate window borders for FullHD skins
 			bsWinPath = plugin_path + "/win2k/"
 
-		bswindow = ET.SubElement( windowstyle, 'borderset', name="bsWindow")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/top_left_corner.png" % bsWinPath, pos="bpTopLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/top_edge.png" % bsWinPath, pos="bpTop")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/top_right_corner.png" % bsWinPath, pos="bpTopRight")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/left_edge.png" % bsWinPath, pos="bpLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/right_edge.png" % bsWinPath, pos="bpRight")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_left_corner.png" % bsWinPath, pos="bpBottomLeft")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_edge.png" % bsWinPath, pos="bpBottom")
-		ET.SubElement( bswindow, 'pixmap', filename="%s/bottom_right_corner.png" % bsWinPath, pos="bpBottomRight")
+		bswindow = ET.SubElement(windowstyle, 'borderset', name="bsWindow")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/top_left_corner.png" % bsWinPath, pos="bpTopLeft")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/top_edge.png" % bsWinPath, pos="bpTop")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/top_right_corner.png" % bsWinPath, pos="bpTopRight")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/left_edge.png" % bsWinPath, pos="bpLeft")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/right_edge.png" % bsWinPath, pos="bpRight")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/bottom_left_corner.png" % bsWinPath, pos="bpBottomLeft")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/bottom_edge.png" % bsWinPath, pos="bpBottom")
+		ET.SubElement(bswindow, 'pixmap', filename="%s/bottom_right_corner.png" % bsWinPath, pos="bpBottomRight")
 
-		bslistboxentry = ET.SubElement( windowstyle, 'borderset', name="bsListboxEntry")
-		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpTop")
-		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpBottom")
-		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpLeft")
-		ET.SubElement( bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpRight")
+		bslistboxentry = ET.SubElement(windowstyle, 'borderset', name="bsListboxEntry")
+		ET.SubElement(bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpTop")
+		ET.SubElement(bslistboxentry, 'pixmap', filename=self.line("line"), pos="bpBottom")
+		ET.SubElement(bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpLeft")
+		ET.SubElement(bslistboxentry, 'pixmap', filename=self.line("vline"), pos="bpRight")
 
 		indent(root)
 		et = ET.ElementTree(root)
@@ -766,20 +766,20 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 	def showFileOptions(self):
 		menu = []
 		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD"):
-			menu.append((_("Create new file with default values") , 100, ""))
+			menu.append((_("Create new file with default values"), 100, ""))
 		elif cfg.skin.value == "PLi-FullNightHD":
-			menu.append((_("Create new file with default values") , 200, ""))
+			menu.append((_("Create new file with default values"), 200, ""))
 		menu.append((_("Save current parameters"), 1))
 		menu.append((_("Delete file with parameters and close plugin"), 2, ""))
 		if cfg.skin.value in ("PLi-HD1", "PLi-FullHD", "PLi-FullNightHD"):
-			menu.append((_("Create new \"%s\" file") % "F&H" , 3, ""))
-			menu.append((_("Create new \"%s\" file") % "Purple" , 4, ""))
-			menu.append((_("Create new \"%s\" file") % "Grey" , 5, ""))
-			menu.append((_("Create new \"%s\" file") % "Grey 2" , 6, ""))
-			menu.append((_("Create new \"%s\" file") % "Violet" , 7, ""))
-			menu.append((_("Create new \"%s\" file") % "Blue Classic" , 10, ""))
+			menu.append((_("Create new \"%s\" file") % "F&H", 3, ""))
+			menu.append((_("Create new \"%s\" file") % "Purple", 4, ""))
+			menu.append((_("Create new \"%s\" file") % "Grey", 5, ""))
+			menu.append((_("Create new \"%s\" file") % "Grey 2", 6, ""))
+			menu.append((_("Create new \"%s\" file") % "Violet", 7, ""))
+			menu.append((_("Create new \"%s\" file") % "Blue Classic", 10, ""))
 
-		menu.append((_("Font sizes table") , 20, ""))
+		menu.append((_("Font sizes table"), 20, ""))
 		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection=self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
@@ -891,7 +891,7 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		self["info"] = Label(_("Font size / line height (px)"))
 		self["fontsinfo"] = Label()
 
-		self.FontInfoCfg = [getConfigListEntry(_("Select font"), config.plugins.ModifyPLiFullHD.fonts )]
+		self.FontInfoCfg = [getConfigListEntry(_("Select font"), config.plugins.ModifyPLiFullHD.fonts)]
 
 		ConfigListScreen.__init__(self, self.FontInfoCfg, session=session, on_change=self.displayValues)
 
@@ -910,10 +910,10 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		self["tmp"].setText("W")
 		info = ""
 		for h in range(1,21):
-			info += ("%02d / %02d\t") % ( h, self.lineHeight(h, family))
-			info += ("%02d / %02d\t") % ( h+20, self.lineHeight(h+20, family))
-			info += ("%02d / %02d\t") % ( h+40, self.lineHeight(h+40, family))
-			info += ("%02d / %02d") % ( h+60, self.lineHeight(h+60, family))
+			info += ("%02d / %02d\t") % (h, self.lineHeight(h, family))
+			info += ("%02d / %02d\t") % (h+20, self.lineHeight(h+20, family))
+			info += ("%02d / %02d\t") % (h+40, self.lineHeight(h+40, family))
+			info += ("%02d / %02d") % (h+60, self.lineHeight(h+60, family))
 			info += ("\n")
 		self["fontsinfo"].setText(info)
 

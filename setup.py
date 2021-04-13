@@ -2,7 +2,7 @@ from distutils.core import setup
 import setup_translate
 
 pkg = 'Extensions.ModifyPLiFullHD'
-setup (name='enigma2-plugin-extensions-modifyplifullhd',
+setup(name='enigma2-plugin-extensions-modifyplifullhd',
 	version='1.47',
 	description='modify font and colors for PLi-FullHD and PLi-HD1 skins',
 	packages=[pkg],
