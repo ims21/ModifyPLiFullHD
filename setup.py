@@ -7,6 +7,6 @@ setup(name='enigma2-plugin-extensions-modifyplifullhd',
 	description='modify font and colors for PLi-FullHD and PLi-HD1 skins',
 	packages=[pkg],
 	package_dir={pkg: 'plugin'},
-	package_data={pkg: ['win2k/*.png','png/*.png', 'locale/*.pot', 'locale/*/LC_MESSAGES/*.mo']},
+	package_data={pkg: ['win2k/*.png', 'png/*.png', 'locale/*.pot', 'locale/*/LC_MESSAGES/*.mo']},
 	cmdclass=setup_translate.cmdclass, # for translation
 	)

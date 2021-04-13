@@ -39,24 +39,24 @@ import glob
 from plugin import plugin_path
 
 cfg = config.plugins.ModifyPLiFullHD
-cfg.skin = NoSave(ConfigSelection(default="PLi-FullHD", choices=[("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
-cfg.toptemplatecolor = NoSave(ConfigIP(default=[0,0,0,48]))
-cfg.basictemplatecolor = NoSave(ConfigIP(default=[0,0,0,32]))
-cfg.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48]))
-cfg.transponderinfocolor = NoSave(ConfigIP(default=[0,0,144,240]))
-cfg.selectedfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
-cfg.yellowcolor = NoSave(ConfigIP(default=[0,255,192,0]))
-cfg.yellowsoftcolor = NoSave(ConfigIP(default=[0,204,172,104]))
-cfg.redcolor = NoSave(ConfigIP(default=[0,250,64,16]))
-cfg.secondfgcolor = NoSave(ConfigIP(default=[0,252,192,0]))
-cfg.greycolor = NoSave(ConfigIP(default=[0,170,170,170]))
-cfg.darkgreycolor = NoSave(ConfigIP(default=[0,85,85,85]))
-cfg.backgroundcolor = NoSave(ConfigIP(default=[0,0,0,0]))
-cfg.blackcolor = NoSave(ConfigIP(default=[0,0,0,0]))
-cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
-cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
-cfg.selector_vertical = ConfigSelection(default="both", choices=[("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
-cfg.oopera_scale = ConfigSelection(default="standard", choices=[("fullhd",_("FullHD")),("standard",_("Standard"))])
+cfg.skin = NoSave(ConfigSelection(default="PLi-FullHD", choices=[("PLi-FullHD", "PLi-FullHD"), ("PLi-FullNightHD", "PLi-FullNightHD"), ("PLi-HD1", "PLi-HD1")]))
+cfg.toptemplatecolor = NoSave(ConfigIP(default=[0, 0, 0, 48]))
+cfg.basictemplatecolor = NoSave(ConfigIP(default=[0, 0, 0, 32]))
+cfg.selectorcolor = NoSave(ConfigIP(default=[0, 0, 0, 48]))
+cfg.transponderinfocolor = NoSave(ConfigIP(default=[0, 0, 144, 240]))
+cfg.selectedfgcolor = NoSave(ConfigIP(default=[0, 252, 192, 0]))
+cfg.yellowcolor = NoSave(ConfigIP(default=[0, 255, 192, 0]))
+cfg.yellowsoftcolor = NoSave(ConfigIP(default=[0, 204, 172, 104]))
+cfg.redcolor = NoSave(ConfigIP(default=[0, 250, 64, 16]))
+cfg.secondfgcolor = NoSave(ConfigIP(default=[0, 252, 192, 0]))
+cfg.greycolor = NoSave(ConfigIP(default=[0, 170, 170, 170]))
+cfg.darkgreycolor = NoSave(ConfigIP(default=[0, 85, 85, 85]))
+cfg.backgroundcolor = NoSave(ConfigIP(default=[0, 0, 0, 0]))
+cfg.blackcolor = NoSave(ConfigIP(default=[0, 0, 0, 0]))
+cfg.fallbackcolor = NoSave(ConfigIP(default=[0, 176, 176, 192]))
+cfg.notavailablecolor = NoSave(ConfigIP(default=[0, 94, 94, 94]))
+cfg.selector_vertical = ConfigSelection(default="both", choices=[("both", _("both")), ("left", _("left only")), ("right", _("right only")), ("no", _("none"))])
+cfg.oopera_scale = ConfigSelection(default="standard", choices=[("fullhd", _("FullHD")), ("standard", _("Standard"))])
 cfg.altwin = ConfigYesNo(default=False)
 
 XML_NAME = "PLi-FullHD_Pars.xml"
@@ -68,7 +68,7 @@ reload_skin_on_start = True
 
 def hex2strColor(argb):
 	out = ""
-	for i in range(28,-1,-4):
+	for i in range(28, -1, -4):
 		out += "%s" % chr(0x30 + (argb >> i & 0xf))
 	return out
 
@@ -170,7 +170,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def loadConfig(self):
 		self.list = []
-		self.list.append(getConfigListEntry(self.skin_enabled,cfg.enabled))
+		self.list.append(getConfigListEntry(self.skin_enabled, cfg.enabled))
 		if cfg.enabled.value:
 			e = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 			self.list.append(getConfigListEntry(self.skin_name, cfg.skin))
@@ -381,7 +381,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 				cfg.blackcolor.value = self.map(value)
 
 	def map(self, colorstring):
-		return [int(colorstring[0:2],16),int(colorstring[2:4],16),int(colorstring[4:6],16),int(colorstring[6:8],16)]
+		return [int(colorstring[0:2], 16), int(colorstring[2:4], 16), int(colorstring[4:6], 16), int(colorstring[6:8], 16)]
 
 	def getColorsFromCfg(self):
 		toptemplate = self.l2h(cfg.toptemplatecolor.value)
@@ -403,7 +403,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		return toptemplate, basictemplate, selector, transponderinfo, selectedfg, yellow, yellowsoft, red, grey, darkgrey, secondfg, fallback, notavailable, background, black
 
 	def l2h(self, l):
-		return "%02x%02x%02x%02x" % (l[0],l[1],l[2],l[3])
+		return "%02x%02x%02x%02x" % (l[0], l[1], l[2], l[3])
 
 	def keySave(self):
 		self.setSkinPath()
@@ -476,7 +476,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.reloadSkin()
 		self.reloadChanellSelection()
 		if recurse:
-			self.close((self["config"].getCurrentIndex(),True))
+			self.close((self["config"].getCurrentIndex(), True))
 		else:
 			self.deleteParseFile(BACKUP)
 			self.close()
@@ -491,7 +491,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def get_opera_scale(self):
 		try:
-			fi = open(OPERA_INI_PATH,"r")
+			fi = open(OPERA_INI_PATH, "r")
 			for line in fi.readlines():
 				if "Scale" in line:
 					if line[-4:-1] == "100":
@@ -909,7 +909,7 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		self["tmp"].instance.setNoWrap(1)
 		self["tmp"].setText("W")
 		info = ""
-		for h in range(1,21):
+		for h in range(1, 21):
 			info += ("%02d / %02d\t") % (h, self.lineHeight(h, family))
 			info += ("%02d / %02d\t") % (h + 20, self.lineHeight(h + 20, family))
 			info += ("%02d / %02d\t") % (h + 40, self.lineHeight(h + 40, family))
