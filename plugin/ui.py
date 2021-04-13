@@ -39,7 +39,7 @@ import glob
 from plugin import plugin_path
 
 cfg = config.plugins.ModifyPLiFullHD
-cfg.skin = NoSave(ConfigSelection(default = "PLi-FullHD", choices = [("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
+cfg.skin = NoSave(ConfigSelection(default="PLi-FullHD", choices=[("PLi-FullHD","PLi-FullHD"),("PLi-FullNightHD","PLi-FullNightHD"),("PLi-HD1","PLi-HD1")]))
 cfg.toptemplatecolor = NoSave(ConfigIP(default=[0,0,0,48]))
 cfg.basictemplatecolor = NoSave(ConfigIP(default=[0,0,0,32]))
 cfg.selectorcolor = NoSave(ConfigIP(default=[0,0,0,48]))
@@ -55,9 +55,9 @@ cfg.backgroundcolor = NoSave(ConfigIP(default=[0,0,0,0]))
 cfg.blackcolor = NoSave(ConfigIP(default=[0,0,0,0]))
 cfg.fallbackcolor = NoSave(ConfigIP(default=[0,176,176,192]))
 cfg.notavailablecolor = NoSave(ConfigIP(default=[0,94,94,94]))
-cfg.selector_vertical = ConfigSelection(default = "both", choices = [("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
-cfg.oopera_scale = ConfigSelection(default = "standard", choices = [("fullhd",_("FullHD")),("standard",_("Standard"))])
-cfg.altwin = ConfigYesNo(default = False)
+cfg.selector_vertical = ConfigSelection(default="both", choices=[("both",_("both")),("left",_("left only")),("right",_("right only")),("no",_("none"))])
+cfg.oopera_scale = ConfigSelection(default="standard", choices=[("fullhd",_("FullHD")),("standard",_("Standard"))])
+cfg.altwin = ConfigYesNo(default=False)
 
 XML_NAME = "PLi-FullHD_Pars.xml"
 XML_FILE = resolveFilename(SCOPE_CONFIG, XML_NAME)
@@ -84,19 +84,19 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		<widget name="info" position="5,262" size="600,25" font="Regular;20" halign="center" transparent="1"/>
 	</screen>"""
 
-	def __init__(self, session, selected = None, show_apply = False):
+	def __init__(self, session, selected=None, show_apply=False):
 		Screen.__init__(self, session)
 		self.session = session
 		self.menuSelectedIndex = selected
 		self.withApply = show_apply
 
 		choicelist = self.readFonts()
-		cfg.font = NoSave(ConfigSelection(default = "LiberationSans-Regular.ttf", choices = choicelist))
+		cfg.font = NoSave(ConfigSelection(default="LiberationSans-Regular.ttf", choices=choicelist))
 
 		self.list = []
 		self.onChangedEntry = []
 
-		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry )
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry )
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
@@ -780,7 +780,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			menu.append((_("Create new \"%s\" file") % "Blue Classic" , 10, ""))
 
 		menu.append((_("Font sizes table") , 20, ""))
-		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection = self.selectionChoiceBox)
+		self.session.openWithCallback(self.fileOptionsCallback, ChoiceBox, title=_("Operations with configuration file"), list=menu, selection=self.selectionChoiceBox)
 
 	def fileOptionsCallback(self, choice):
 		if choice is None:
@@ -886,14 +886,14 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 
 		config.plugins.ModifyPLiFullHD = ConfigSubsection()
 		choicelist = self.readFonts()
-		config.plugins.ModifyPLiFullHD.fonts = NoSave(ConfigSelection(default = choicelist[0], choices = choicelist))
+		config.plugins.ModifyPLiFullHD.fonts = NoSave(ConfigSelection(default=choicelist[0], choices=choicelist))
 
 		self["info"] = Label(_("Font size / line height (px)"))
 		self["fontsinfo"] = Label()
 
 		self.FontInfoCfg = [getConfigListEntry(_("Select font"), config.plugins.ModifyPLiFullHD.fonts )]
 
-		ConfigListScreen.__init__(self, self.FontInfoCfg, session = session, on_change = self.displayValues)
+		ConfigListScreen.__init__(self, self.FontInfoCfg, session=session, on_change=self.displayValues)
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"],
 			{

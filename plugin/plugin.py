@@ -23,7 +23,7 @@ from Plugins.Plugin import PluginDescriptor
 from Components.config import config, ConfigSubsection, ConfigYesNo
 
 config.plugins.ModifyPLiFullHD = ConfigSubsection()
-config.plugins.ModifyPLiFullHD.enabled = ConfigYesNo(default = False)
+config.plugins.ModifyPLiFullHD.enabled = ConfigYesNo(default=False)
 
 
 def autostart(reason, **kwargs):
@@ -44,6 +44,6 @@ def Plugins(path, **kwargs):
 	name = _("Modify PLi-FullHD")
 	descr = _("Change regular font and colors in PLi FullHD/FullNightHD/HD1 skins")
 	return [
-		PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc=main),
+		PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon='plugin.png', fnc=main),
 		PluginDescriptor(name=name, description=descr, where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=autostart),
 	]
