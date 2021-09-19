@@ -66,11 +66,6 @@ OPERA_INI_PATH = "/usr/local/OpenOpera/home/opera.ini"
 
 reload_skin_on_start = True
 
-def hex2strColor(argb):
-	out = ""
-	for i in range(28,-1,-4):
-		out += "%s" % chr(0x30 + (argb>>i & 0xf))
-	return out
 
 class ModifyPLiFullHD(Screen, ConfigListScreen):
 	skin = """
@@ -172,32 +167,32 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		self.list = []
 		self.list.append(getConfigListEntry(self.skin_enabled ,cfg.enabled))
 		if cfg.enabled.value:
-			e = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
+			e = "\c%08x" % int(skin.parseColor("foreground").argb())
 			self.list.append(getConfigListEntry(self.skin_name, cfg.skin ))
 			self.list.append(getConfigListEntry(_("Regular font"), cfg.font))
 			self.list.append(getConfigListEntry(_("Top color  (a,r,g,b)"), cfg.toptemplatecolor))
 			self.list.append(getConfigListEntry(_("Selector color  (a,r,g,b)"), cfg.selectorcolor))
 			self.list.append(getConfigListEntry(_("Bottom color  (a,r,g,b)"), cfg.basictemplatecolor))
 			self.list.append(getConfigListEntry(_("Vertical selector's lines"), cfg.selector_vertical))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
+			b = "\c%08x" % int(skin.parseColor("selectedFG").argb())
 			self.list.append(getConfigListEntry(b + _("SelectedFG color  (a,r,g,b)") + e, cfg.selectedfgcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("secondFG").argb()))
+			b = "\c%08x" % int(skin.parseColor("secondFG").argb())
 			self.list.append(getConfigListEntry(b + _("SecondFG color  (a,r,g,b)") + e, cfg.secondfgcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
+			b = "\c%08x" % int(skin.parseColor("yellow").argb())
 			self.list.append(getConfigListEntry(b + _("Yellow color  (a,r,g,b)") + e, cfg.yellowcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("yellowsoft").argb()))
+			b = "\c%08x" % int(skin.parseColor("yellowsoft").argb())
 			self.list.append(getConfigListEntry(b + _("Yellowsoft color  (a,r,g,b)") + e, cfg.yellowsoftcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("transponderinfo").argb()))
+			b = "\c%08x" % int(skin.parseColor("transponderinfo").argb())
 			self.list.append(getConfigListEntry(b + _("TransponderInfo color  (a,r,g,b)") + e, cfg.transponderinfocolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("red").argb()))
+			b = "\c%08x" % int(skin.parseColor("red").argb())
 			self.list.append(getConfigListEntry(b + _("Red color  (a,r,g,b)") + e, cfg.redcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("grey").argb()))
+			b = "\c%08x" % int(skin.parseColor("grey").argb())
 			self.list.append(getConfigListEntry(b + _("Grey color  (a,r,g,b)") + e, cfg.greycolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("darkgrey").argb()))
+			b = "\c%08x" % int(skin.parseColor("darkgrey").argb())
 			self.list.append(getConfigListEntry(b + _("Darkgrey color  (a,r,g,b)") + e, cfg.darkgreycolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("fallback").argb()))
+			b = "\c%08x" % int(skin.parseColor("fallback").argb())
 			self.list.append(getConfigListEntry(b + _("Fallback color  (a,r,g,b)") + e, cfg.fallbackcolor))
-			b = "\c%s" % hex2strColor(int(skin.parseColor("notavailable").argb()))
+			b = "\c%08x" % int(skin.parseColor("notavailable").argb())
 			self.list.append(getConfigListEntry(b + _("Notavailable color  (a,r,g,b)") + e, cfg.notavailablecolor))
 			self.list.append(getConfigListEntry(_("Background color  (a,r,g,b)"), cfg.backgroundcolor))
 			self.list.append(getConfigListEntry(_("Black color  (a,r,g,b)"), cfg.blackcolor))
