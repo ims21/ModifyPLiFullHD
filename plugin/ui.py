@@ -1,3 +1,4 @@
+from __future__ import print_function
 # for localized messages
 from . import _
 #################################################################################
@@ -19,7 +20,6 @@ VERSION = "1.47"
 #
 #################################################################################
 
-from __future__ import print_function
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigIP, NoSave, ConfigSubsection, config, ConfigSelection, ConfigYesNo
