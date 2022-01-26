@@ -19,6 +19,7 @@ VERSION = "1.47"
 #
 #################################################################################
 
+from __future__ import print_function
 from Screens.Screen import Screen
 from Components.ConfigList import ConfigListScreen
 from Components.config import getConfigListEntry, ConfigIP, NoSave, ConfigSubsection, config, ConfigSelection, ConfigYesNo
@@ -287,7 +288,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 			name = font.attrib.get('name', None)
 			if name == "Regular":
 				font.set('filename', cfg.font.value)
-				#print "[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont())
+				#print("[ModifyPLiFullHD] set font %s instead of %s" % (cfg.font.value, self.parseFont()))
 
 		alt = plugin_path + "/win2k/"
 
@@ -456,7 +457,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		try:
 			root = ET.parse(XML_FILE).getroot()
 		except:
-			print "[ModifyPLiFullHD] ERROR - file %s corrupted ?" % XML_FILE
+			print("[ModifyPLiFullHD] ERROR - file %s corrupted ?" % XML_FILE)
 			self.wrong_xml = True
 			return False
 		else:
@@ -554,7 +555,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 	def reloadSkin(self):
 		path = os.path.dirname(XML_FILE) + "/"
-		print "[ModifyPLiFullHD] parsing %s" % XML_FILE
+		print("[ModifyPLiFullHD] parsing %s" % XML_FILE)
 
 		# remove disabled items in plugin's setup from xml before reloading skin
 		root = ET.parse(XML_FILE).getroot()
@@ -571,10 +572,10 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 		# call reload skin
 		try:
 			skin.loadSingleSkinData(enigma.getDesktop(0), root, path)
-			print "[ModifyPLiFullHD] skin reload - old skin code"
+			print("[ModifyPLiFullHD] skin reload - old skin code")
 		except:
 			skin.loadSingleSkinData(enigma.getDesktop(0), skin.GUI_SKIN_ID, root, path)
-			print "[ModifyPLiFullHD] skin reload - new skin code"
+			print("[ModifyPLiFullHD] skin reload - new skin code")
 		for elem in root:
 			if elem.tag == 'screen':
 				name = elem.attrib.get('name', None)
