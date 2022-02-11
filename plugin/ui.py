@@ -906,11 +906,10 @@ class ModifyPLiFullHDFontInfo(Screen, ConfigListScreen):
 		self["tmp"].setText("W")
 		info = ""
 		for h in range(1, 21):
-			info += ("%02d / %02d\t") % (h, self.lineHeight(h, family))
-			info += ("%02d / %02d\t") % (h + 20, self.lineHeight(h + 20, family))
-			info += ("%02d / %02d\t") % (h + 40, self.lineHeight(h + 40, family))
-			info += ("%02d / %02d") % (h + 60, self.lineHeight(h + 60, family))
-			info += ("\n")
+			info += ("%02d / %02d") % (h, self.lineHeight(h, family)) + "\t"
+			info += ("%02d / %02d") % (h + 20, self.lineHeight(h + 20, family)) + "\t"
+			info += ("%02d / %02d") % (h + 40, self.lineHeight(h + 40, family)) + "\t"
+			info += ("%02d / %02d") % (h + 60, self.lineHeight(h + 60, family)) + "\n"
 		self["fontsinfo"].setText(info)
 
 	def lineHeight(self, size, family):
