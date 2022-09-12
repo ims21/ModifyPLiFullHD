@@ -5,7 +5,7 @@ from . import _
 #
 #    Plugin for Enigma2
 #    version:
-VERSION = "1.47"
+VERSION = "1.48"
 #    Coded by ims (c)2015-2022
 #
 #    This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ import shutil
 from Tools.Directories import resolveFilename, SCOPE_CONFIG, SCOPE_CURRENT_SKIN, fileExists, SCOPE_FONTS
 import xml.etree.cElementTree as ET
 import glob
-from plugin import plugin_path
+from .plugin import plugin_path
 
 cfg = config.plugins.ModifyPLiFullHD
 cfg.skin = NoSave(ConfigSelection(default="PLi-FullHD", choices=[("PLi-FullHD", "PLi-FullHD"), ("PLi-FullNightHD", "PLi-FullNightHD"), ("PLi-HD1", "PLi-HD1")]))
@@ -324,7 +324,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 					if pixmap.attrib.get("pos") == "bpRight":
 						pixmap.set('filename', self.line("vline"))
 
-		fo = open(XML_FILE, "w")
+		fo = open(XML_FILE, "wb")
 		tree.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
 
 	def parseFont(self):
@@ -755,7 +755,7 @@ class ModifyPLiFullHD(Screen, ConfigListScreen):
 
 		indent(root)
 		et = ET.ElementTree(root)
-		fo = open(XML_FILE, "w")
+		fo = open(XML_FILE, "wb")
 		et.write(fo, encoding='utf-8', xml_declaration=None, default_namespace=None, method="xml")
 		self.wrong_xml = False
 
